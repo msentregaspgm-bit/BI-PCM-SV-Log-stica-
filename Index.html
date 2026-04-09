@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal PCM - SV Logística</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --sv-blue: #005697; --sv-yellow: #FDB813; --sv-bg: #1a1d20; --card-bg: #2d3238; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--sv-bg); color: white; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        .header-bi { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--sv-yellow); padding-bottom: 10px; }
+        
+        /* Cartões de Indicadores */
+        .grid-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .card-kpi { background: var(--card-bg); padding: 20px; border-radius: 12px; border-left: 5px solid var(--sv-yellow); text-align: center; }
+        .card-kpi h3 { margin: 0; font-size: 0.8rem; color: #aaa; text-transform: uppercase; }
+        .card-kpi div { font-size: 1.8rem; font-weight: 800; margin-top: 10px; }
+        .vermelho { border-left-color: #ff4d4d; color: #ff4d4d; }
+
+        /* Gráficos */
+        .grid-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
+        .chart-box { background: var(--card-bg); padding: 20px; border-radius: 12px; height: 350px; }
+        h4 { margin: 0 0 15px 0; font-size: 1rem; color: var(--sv-yellow); text-transform: uppercase; }
+
+        /* Lista de OS */
+        .os-list { background: var(--card-bg); margin-top: 20px; border-radius: 12px; padding: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { text-align: left; color: #aaa; padding: 10px; border-bottom: 1px solid #444; }
+        td { padding: 10px; border-bottom: 1px solid #383e45; }
+        .status-aberta { color: #ff4d4d; font-weight: bold; }
+        
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-bg); display: flex; justify-content: center; align-items: center; z-index: 100; }
+    </style>
+</head>
+<body>
+
+<div id="loader"><h2>CARREGANDO BI PCM...</h2></div>
+
+<div class="container">
+    <div class="header-bi">
+        <h2>PORTAL PCM SV LOGÍSTICA</h2>
+        <button onclick="location.reload()" style="background: none; border: 1px solid var(--sv-yellow); color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer;">Atualizar</button>
+    </div>
+
+    <div class="grid-kpi">
+        <div class="card-kpi">
+            <h3>Total Ordens (OS)</h3>
+            <div id="kpiTotal">0</div>
+        </div>
+        <div class="card-kpi vermelho">
+            <h3>Backlog (Abertas)</h3>
+            <div id="kpiAbertas">0</div>
+        </div>
+        <div class="card-kpi">
+            <h3>Investimento Total</h3>
+            <div id="kpiCusto">R$ 0</div>
+        </div>
+        <div class="card-kpi">
+            <h3>Média HH/OS</h3>
+            <div id="kpiHH">00:00</div>
+        </div>
+    </div>
+
+    <div class="grid-charts">
+        <div class="chart-box">
+            <h4>Ranking de Falhas por Sistema</h4>
+            <canvas id="chartSistemas"></canvas>
+        </div>
+        <div class="chart-box">
+            <h4>Manutenção: Corretiva x Preventiva</h4>
+            <canvas id="chartTipos"></canvas>
+        </div>
+    </div>
+
+    <div class="os-list">
+        <h4>Ordens de Serviço em Aberto (Prioridade Alta)</h4>
+        <table id="tabelaOS">
+            <thead>
+                <tr>
+                    <th>OS</th>
+                    <th>Equipamento</th>
+                    <th>Sistema</th>
+                    <th>Início</th>
+                    <th>Prioridade</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const URL_API = "https://script.google.com/macros/s/AKfycbz0iqFZ23lWHE3_pOs1Q_sGzcl5u5VEqTBfr1NQ5Mgd3LAMp3OusltRzXldQeoUWL13fw/exec";
+
+    window.onload = async () => {
+        const res = await fetch(URL_API);
+        const data = await res.json();
+        processarBI(data);
+        document.getElementById('loader').style.display = 'none';
+    };
+
+    function processarBI(data) {
+        const ordens = data.ordens;
+        
+        // 1. KPIs
+        const abertas = ordens.filter(o => o.status === "Aberta");
+        const totalCusto = ordens.reduce((acc, curr) => acc + (parseFloat(curr.total_os) || 0), 0);
+        
+        document.getElementById('kpiTotal').innerText = ordens.length;
+        document.getElementById('kpiAbertas').innerText = abertas.length;
+        document.getElementById('kpiCusto').innerText = totalCusto.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+
+        // 2. Gráfico Sistemas (Pareto)
+        const sistemas = {};
+        ordens.forEach(o => { if(o.sistema) sistemas[o.sistema] = (sistemas[o.sistema] || 0) + 1; });
+        const sortedSistemas = Object.entries(sistemas).sort((a,b) => b[1] - a[1]).slice(0, 7);
+
+        new Chart(document.getElementById('chartSistemas'), {
+            type: 'bar',
+            data: {
+                labels: sortedSistemas.map(s => s[0]),
+                datasets: [{ label: 'Qtd Falhas', data: sortedSistemas.map(s => s[1]), backgroundColor: '#FDB813' }]
+            },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        // 3. Gráfico Tipos de Manutenção
+        const tipos = {};
+        ordens.forEach(o => { if(o.manutencao) tipos[o.manutencao] = (tipos[o.manutencao] || 0) + 1; });
+
+        new Chart(document.getElementById('chartTipos'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(tipos),
+                datasets: [{ data: Object.values(tipos), backgroundColor: ['#005697', '#FDB813', '#ff4d4d', '#28a745', '#999'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#fff' } } } }
+        });
+
+        // 4. Tabela de OS Abertas Críticas
+        const tabela = document.querySelector('#tabelaOS tbody');
+        const criticas = abertas.filter(o => o.prioridade === "1 - Alta").slice(0, 8);
+        
+        tabela.innerHTML = criticas.map(o => `
+            <tr>
+                <td>${o.nro_ordem_servico}</td>
+                <td><b>${o.cod_sec_veiculo}</b></td>
+                <td>${o.sistema}</td>
+                <td>${new Date(o.data_e_hora_de_inicio).toLocaleDateString()}</td>
+                <td class="status-aberta">${o.prioridade}</td>
+            </tr>
+        `).join('');
+    }
+</script>
+</body>
+</html>
