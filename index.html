@@ -5,117 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BI PCM - SV Logística</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --sv-blue: #002D5E; --sv-light-blue: #005697; --sv-yellow: #FFD700; --bg: #F0F2F5; }
-        body { font-family: 'Roboto', sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
+        :root { --sv-blue: #002D5E; --sv-yellow: #FFD700; --bg: #F0F2F5; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; }
         
-        /* Splash Screen */
+        /* Splash com Logo */
         #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
-        #splash img { width: 300px; margin-bottom: 20px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+        #splash img { width: 350px; }
 
-        /* Layout */
-        .sidebar { background: var(--sv-blue); color: white; padding: 20px; text-align: center; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
-        .sidebar img { width: 180px; }
-        .main-content { padding: 20px; max-width: 1600px; margin: auto; }
-        
-        /* Filtros */
-        .filter-bar { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .filter-bar select, .filter-bar input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .navbar { background: var(--sv-blue); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .navbar img { height: 50px; }
 
-        /* KPI Cards */
-        .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .kpi-card { background: white; padding: 20px; border-radius: 12px; border-bottom: 5px solid var(--sv-light-blue); box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
-        .kpi-card h3 { margin: 0; font-size: 14px; color: #666; text-transform: uppercase; }
-        .kpi-card .value { font-size: 24px; font-weight: bold; color: var(--sv-blue); margin: 10px 0; }
-        .kpi-card .sub { font-size: 12px; color: #999; }
+        .main { padding: 20px; max-width: 1400px; margin: auto; }
+
+        /* Filtros Profissionais */
+        .filter-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: flex; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); align-items: center; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
+        select, input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; min-width: 150px; }
+
+        /* Balões de KPI */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .kpi-card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-bottom: 5px solid var(--sv-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .kpi-card h3 { margin: 0; font-size: 13px; color: #7f8c8d; }
+        .kpi-card .value { font-size: 24px; font-weight: 800; color: var(--sv-blue); margin: 8px 0; }
+        .kpi-card .percent { font-size: 12px; color: #95a5a6; font-weight: bold; }
 
         /* Gráficos */
-        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
-        .chart-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 350px; }
-        .chart-card h4 { margin-top: 0; color: var(--sv-blue); border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
+        .chart-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 380px; }
+        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-blue); border-bottom: 1px solid #eee; padding-bottom: 10px; font-size: 16px; }
     </style>
 </head>
 <body>
 
 <div id="splash">
-    <img src="https://i.imgur.com/eO6aLIm.png" alt="Logo SV"> <p style="color:white">Carregando PCM Intelligence...</p>
+    <img src="https://i.imgur.com/eO6aLIm.png" alt="SV Logística">
+    <h2 style="color: white; margin-top: 20px;">BI PCM INTELLIGENCE</h2>
 </div>
 
-<div class="sidebar">
-    <img src="https://i.imgur.com/eO6aLIm.png" alt="Logo SV">
+<div class="navbar">
+    <img src="https://i.imgur.com/eO6aLIm.png" alt="SV Logo">
+    <h2 style="margin:0">DASHBOARD DE MANUTENÇÃO</h2>
 </div>
 
-<div class="main-content">
-    <div class="filter-bar">
-        <input type="month" id="filterMonth">
-        <select id="filterStatus">
-            <option value="">Status: Todos</option>
-            <option value="Aberta">Aberta</option>
-            <option value="Finalizada">Finalizada</option>
-        </select>
-        <select id="filterMaint">
-            <option value="">Manutenção: Todas</option>
-            <option value="Corretiva">Corretiva</option>
-            <option value="Preventiva">Preventiva</option>
-            <option value="Preditiva">Preditiva</option>
-        </select>
+<div class="main">
+    <div class="filter-section">
+        <div class="filter-group">
+            <label>Período (Mês)</label>
+            <input type="month" id="fData" onchange="updateDashboard()">
+        </div>
+        <div class="filter-group">
+            <label>Manutenção</label>
+            <select id="fManut" onchange="updateDashboard()">
+                <option value="">Todas</option>
+                <option value="Corretiva">Corretiva</option>
+                <option value="Preventiva">Preventiva</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Status</label>
+            <select id="fStatus" onchange="updateDashboard()">
+                <option value="">Todos</option>
+                <option value="Finalizada">Fechadas</option>
+                <option value="Aberta">Abertas</option>
+            </select>
+        </div>
     </div>
 
-    <div class="kpi-container">
-        <div class="kpi-card"><h3>Total OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas">0</div><div class="sub" id="pAbertas">0%</div></div>
-        <div class="kpi-card"><h3>Finalizadas</h3><div id="kFechadas" class="value">0</div><div class="sub" id="pFechadas">0%</div></div>
-        <div class="kpi-card"><h3>Custo Peças</h3><div class="value" id="kCusto">R$ 0</div></div>
-        <div class="kpi-card"><h3>Total HH</h3><div class="value" id="kHH">0</div></div>
+    <div class="kpi-grid">
+        <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
+        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:#e74c3c">0</div><div class="percent" id="pAbertas">0%</div></div>
+        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#27ae60">0</div><div class="percent" id="pFechadas">0%</div></div>
+        <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
+        <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0.0</div></div>
     </div>
 
-    <div class="charts-grid">
-        <div class="chart-card"><h4>HH Mensal por Sistema (Top 5)</h4><canvas id="ctxSist"></canvas></div>
-        <div class="chart-card"><h4>Ranking de Prioridade OC</h4><canvas id="ctxPrio"></canvas></div>
-        <div class="chart-card"><h4>Top 10 Equipamentos (Mais OC)</h4><canvas id="ctxEquip"></canvas></div>
-        <div class="chart-card"><h4>HH por Centro de Custo</h4><canvas id="ctxHHCC"></canvas></div>
-        <div class="chart-card"><h4>% OS por Centro de Custo</h4><canvas id="ctxPizzaCC"></canvas></div>
+    <div class="charts-container">
+        <div class="chart-card"><h4>HH Mensal por Sistema</h4><canvas id="cHH"></canvas></div>
+        <div class="chart-card"><h4>Ranking de Prioridade OC</h4><canvas id="cPrio"></canvas></div>
+        <div class="chart-card"><h4>Top 10 Equipamentos com Mais OC</h4><canvas id="cEquip"></canvas></div>
+        <div class="chart-card"><h4>HH por Centro de Custo</h4><canvas id="cHHCC"></canvas></div>
+        <div class="chart-card"><h4>% OS por Centro de Custo</h4><canvas id="cPizza"></canvas></div>
     </div>
 </div>
 
 <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbyixFWFjf5dE_tp6WxTXbKPdUNF4aNIW0lJhDN9PJorlAJHp8M7_DDAA5K95ovBga9J/exec"; // <--- COLOQUE A URL AQUI
+    const URL_API = "https://script.google.com/macros/s/AKfycbxTW3v5xzUbH1Xf46dDJ9rFBb3_RUKTk0APHMBsmCxbYJOooHI8cr7LagB5RmW1GwUbLA/exec"; // ⚠️ INSIRA SUA URL DO SCRIPT AQUI
     let rawData = [];
     let charts = {};
 
     async function init() {
         try {
-            const response = await fetch(URL_API);
-            rawData = await response.json();
-            document.getElementById('splash').style.opacity = '0';
-            setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
+            const res = await fetch(URL_API);
+            rawData = await res.json();
+            document.getElementById('splash').style.display = 'none';
             updateDashboard();
-        } catch (e) {
-            console.error("Erro ao carregar dados", e);
-        }
+        } catch (e) { alert("Erro ao carregar dados!"); }
     }
 
     function updateDashboard() {
-        const fMonth = document.getElementById('filterMonth').value;
-        const fStatus = document.getElementById('filterStatus').value;
-        const fMaint = document.getElementById('filterMaint').value;
+        const valData = document.getElementById('fData').value;
+        const valManut = document.getElementById('fManut').value;
+        const valStatus = document.getElementById('fStatus').value;
 
         const data = rawData.filter(d => {
-            const date = new Date(d["Data_E_Hora_De_Inicio"]); // Ajustar nome da coluna se necessário
-            const monthMatch = fMonth ? `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}` === fMonth : true;
-            const statusMatch = fStatus ? d["Status"] === fStatus : true;
-            const maintMatch = fMaint ? d["manutencao"] === fMaint : true;
-            return monthMatch && statusMatch && maintMatch;
+            // Lógica de Data (baseada na coluna data_e_hora_de_inicio)
+            let dateMatch = true;
+            if(valData) {
+                const dPart = d.data_e_hora_de_inicio.split(' '); // Tenta pegar a data
+                dateMatch = d.data_e_hora_de_inicio.includes(valData);
+            }
+            const manutMatch = valManut ? d.manutencao === valManut : true;
+            const statusMatch = valStatus ? d.status === valStatus : true;
+            return dateMatch && manutMatch && statusMatch;
         });
 
-        // Cálculos KPIs
+        // Balões
         const total = data.length;
-        const abertas = data.filter(d => d["Status"] === "Aberta").length;
-        const fechadas = data.filter(d => d["Status"] === "Finalizada").length;
-        const custo = data.reduce((acc, d) => acc + (d["Produtos"] || 0), 0);
-        const hh = data.reduce((acc, d) => acc + (d["HH"] || 0), 0);
+        const abertas = data.filter(d => d.status === 'Aberta').length;
+        const fechadas = data.filter(d => d.status === 'Finalizada').length;
+        const custo = data.reduce((acc, d) => acc + (d.produtos || 0), 0);
+        const hh = data.reduce((acc, d) => acc + (d.hh || 0), 0);
 
         document.getElementById('kTotal').innerText = total;
         document.getElementById('kAbertas').innerText = abertas;
@@ -129,66 +140,63 @@
     }
 
     function renderCharts(data) {
-        // Limpar gráficos anteriores
         Object.values(charts).forEach(c => c.destroy());
 
         // 1. HH por Sistema (Barra Vertical)
-        const sistData = groupBy(data, "sistema", "HH");
-        charts.sist = new Chart(document.getElementById('ctxSist'), {
+        const sist = sumBy(data, "sistema", "hh");
+        charts.cHH = new Chart(document.getElementById('cHH'), {
             type: 'bar',
-            data: { labels: Object.keys(sistData), datasets: [{ label: 'HH', data: Object.values(sistData), backgroundColor: '#005697' }] }
+            data: { labels: Object.keys(sist), datasets: [{ label: 'Horas', data: Object.values(sist), backgroundColor: '#005697' }] }
         });
 
-        // 2. Ranking Prioridade (Barra Horizontal)
-        const prioData = groupByCount(data, "prioridade*");
-        charts.prio = new Chart(document.getElementById('ctxPrio'), {
+        // 2. Prioridade (Barra Horizontal)
+        const prio = countBy(data, "prioridade");
+        charts.cPrio = new Chart(document.getElementById('cPrio'), {
             type: 'bar',
             options: { indexAxis: 'y' },
-            data: { labels: Object.keys(prioData), datasets: [{ label: 'Qtd OC', data: Object.values(prioData), backgroundColor: '#FFD700' }] }
+            data: { labels: Object.keys(prio), datasets: [{ label: 'Qtd OC', data: Object.values(prio), backgroundColor: '#FFD700' }] }
         });
 
         // 3. Top 10 Equipamentos
-        const equipData = groupByCount(data, "cod._sec._veiculo"); // Ajuste para nome da coluna de equipamento
-        const top10 = Object.entries(equipData).sort((a,b)=>b[1]-a[1]).slice(0,10);
-        charts.equip = new Chart(document.getElementById('ctxEquip'), {
-            type: 'bar', options: { indexAxis: 'y' },
-            data: { labels: top10.map(x=>x[0]), datasets: [{ label: 'Qtd OC', data: top10.map(x=>x[1]), backgroundColor: '#002D5E' }] }
+        const equip = countBy(data, "cod_sec_veiculo");
+        const top10 = Object.entries(equip).sort((a,b)=>b[1]-a[1]).slice(0,10);
+        charts.cEquip = new Chart(document.getElementById('cEquip'), {
+            type: 'bar',
+            options: { indexAxis: 'y' },
+            data: { labels: top10.map(x=>x[0]), datasets: [{ label: 'OCs', data: top10.map(x=>x[1]), backgroundColor: '#002D5E' }] }
         });
 
-        // 4. HH por Centro de Custo
-        const ccData = groupBy(data, "centro_resultado", "HH");
-        charts.hhcc = new Chart(document.getElementById('ctxHHCC'), {
-            type: 'bar', options: { indexAxis: 'y' },
-            data: { labels: Object.keys(ccData), datasets: [{ label: 'HH', data: Object.values(ccData), backgroundColor: '#005697' }] }
+        // 4. HH por CC
+        const ccHH = sumBy(data, "centro_resultado", "hh");
+        charts.cHHCC = new Chart(document.getElementById('cHHCC'), {
+            type: 'bar',
+            options: { indexAxis: 'y' },
+            data: { labels: Object.keys(ccHH), datasets: [{ label: 'HH', data: Object.values(ccHH), backgroundColor: '#005697' }] }
         });
 
         // 5. % OS por CC (Pizza)
-        const ccPizza = groupByCount(data, "centro_resultado");
-        charts.pizza = new Chart(document.getElementById('ctxPizzaCC'), {
+        const ccPizza = countBy(data, "centro_resultado");
+        charts.cPizza = new Chart(document.getElementById('cPizza'), {
             type: 'pie',
-            data: { labels: Object.keys(ccPizza), datasets: [{ data: Object.values(ccPizza), backgroundColor: ['#002D5E', '#005697', '#FFD700', '#00A8E8', '#999'] }] }
+            data: { labels: Object.keys(ccPizza), datasets: [{ data: Object.values(ccPizza), backgroundColor: ['#002D5E', '#005697', '#FFD700', '#e74c3c', '#2ecc71'] }] }
         });
     }
 
-    // Helpers
-    function groupBy(data, key, sumKey) {
-        return data.reduce((acc, d) => {
+    function sumBy(arr, key, sumKey) {
+        return arr.reduce((acc, d) => {
             const k = d[key] || "Outros";
             acc[k] = (acc[k] || 0) + (d[sumKey] || 0);
             return acc;
         }, {});
     }
 
-    function groupByCount(data, key) {
-        return data.reduce((acc, d) => {
+    function countBy(arr, key) {
+        return arr.reduce((acc, d) => {
             const k = d[key] || "Outros";
             acc[k] = (acc[k] || 0) + 1;
             return acc;
         }, {});
     }
-
-    // Listeners
-    document.querySelectorAll('.filter-bar select, .filter-bar input').forEach(el => el.addEventListener('change', updateDashboard));
 
     init();
 </script>
