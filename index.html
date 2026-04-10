@@ -8,75 +8,49 @@
     <style>
         :root { --sv-blue: #002D5E; --sv-yellow: #FFD700; --bg: #F0F2F5; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; }
-        
-        /* Splash com Logo */
         #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
-        #splash img { width: 350px; }
-
-        .navbar { background: var(--sv-blue); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .navbar img { height: 50px; }
-
-        .main { padding: 20px; max-width: 1400px; margin: auto; }
-
-        /* Filtros Profissionais */
-        .filter-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: flex; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); align-items: center; }
-        .filter-group { display: flex; flex-direction: column; gap: 5px; }
-        .filter-group label { font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
-        select, input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #fff; min-width: 150px; }
-
-        /* Balões de KPI */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        #splash img { width: 300px; }
+        .navbar { background: var(--sv-blue); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 4px solid var(--sv-yellow); }
+        .main { padding: 20px; max-width: 1500px; margin: auto; }
+        .filter-section { background: white; padding: 20px; border-radius: 12px; margin-bottom: 25px; display: flex; gap: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .kpi-card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-bottom: 5px solid var(--sv-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .kpi-card h3 { margin: 0; font-size: 13px; color: #7f8c8d; }
-        .kpi-card .value { font-size: 24px; font-weight: 800; color: var(--sv-blue); margin: 8px 0; }
-        .kpi-card .percent { font-size: 12px; color: #95a5a6; font-weight: bold; }
-
-        /* Gráficos */
-        .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
-        .chart-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 380px; }
-        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-blue); border-bottom: 1px solid #eee; padding-bottom: 10px; font-size: 16px; }
+        .kpi-card .value { font-size: 26px; font-weight: 800; color: var(--sv-blue); margin: 8px 0; }
+        .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 20px; }
+        .chart-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 420px; }
+        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-blue); text-transform: uppercase; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div id="splash">
-    <img src="https://i.imgur.com/eO6aLIm.png" alt="SV Logística">
-    <h2 style="color: white; margin-top: 20px;">BI PCM INTELLIGENCE</h2>
-</div>
+<div id="splash"><img src="https://i.imgur.com/eO6aLIm.png" alt="Logo SV"></div>
 
 <div class="navbar">
-    <img src="https://i.imgur.com/eO6aLIm.png" alt="SV Logo">
-    <h2 style="margin:0">DASHBOARD DE MANUTENÇÃO</h2>
+    <div style="display:flex; align-items:center; gap:20px;">
+        <img src="https://i.imgur.com/eO6aLIm.png" height="50">
+        <h2 style="margin:0">PCM INTELLIGENCE - SV LOGÍSTICA</h2>
+    </div>
 </div>
 
 <div class="main">
     <div class="filter-section">
-        <div class="filter-group">
-            <label>Período (Mês)</label>
-            <input type="month" id="fData" onchange="updateDashboard()">
-        </div>
-        <div class="filter-group">
-            <label>Manutenção</label>
-            <select id="fManut" onchange="updateDashboard()">
-                <option value="">Todas</option>
-                <option value="Corretiva">Corretiva</option>
-                <option value="Preventiva">Preventiva</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label>Status</label>
-            <select id="fStatus" onchange="updateDashboard()">
-                <option value="">Todos</option>
-                <option value="Finalizada">Fechadas</option>
-                <option value="Aberta">Abertas</option>
-            </select>
-        </div>
+        <input type="month" id="fData" onchange="updateDashboard()" style="padding:10px; border-radius:5px; border:1px solid #ddd;">
+        <select id="fManut" onchange="updateDashboard()" style="padding:10px; border-radius:5px; border:1px solid #ddd;">
+            <option value="">Manutenção: Todas</option>
+            <option value="Corretiva">Corretiva</option>
+            <option value="Preventiva">Preventiva</option>
+        </select>
+        <select id="fStatus" onchange="updateDashboard()" style="padding:10px; border-radius:5px; border:1px solid #ddd;">
+            <option value="">Status: Todos</option>
+            <option value="Finalizada">Finalizada</option>
+            <option value="Aberta">Aberta</option>
+        </select>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:#e74c3c">0</div><div class="percent" id="pAbertas">0%</div></div>
-        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#27ae60">0</div><div class="percent" id="pFechadas">0%</div></div>
+        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:#e74c3c">0</div></div>
+        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#27ae60">0</div></div>
         <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
         <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0.0</div></div>
     </div>
@@ -84,14 +58,14 @@
     <div class="charts-container">
         <div class="chart-card"><h4>HH Mensal por Sistema</h4><canvas id="cHH"></canvas></div>
         <div class="chart-card"><h4>Ranking de Prioridade OC</h4><canvas id="cPrio"></canvas></div>
-        <div class="chart-card"><h4>Top 10 Equipamentos com Mais OC</h4><canvas id="cEquip"></canvas></div>
+        <div class="chart-card"><h4>Top 10 Equipamentos (Mais OC)</h4><canvas id="cEquip"></canvas></div>
         <div class="chart-card"><h4>HH por Centro de Custo</h4><canvas id="cHHCC"></canvas></div>
-        <div class="chart-card"><h4>% OS por Centro de Custo</h4><canvas id="cPizza"></canvas></div>
+        <div class="chart-card"><h4>% Sistemas por OS</h4><canvas id="cPizza"></canvas></div>
     </div>
 </div>
 
 <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbxTW3v5xzUbH1Xf46dDJ9rFBb3_RUKTk0APHMBsmCxbYJOooHI8cr7LagB5RmW1GwUbLA/exec"; // ⚠️ INSIRA SUA URL DO SCRIPT AQUI
+    const URL_API = "https://script.google.com/macros/s/AKfycbyeaYipB1bTMpHavvUykztQQJ8g3jQ2c1jeVsM2l4h0ieAAxx4i6RXvJYVHLeYoA1QOog/exec"; // ⚠️ INSIRA SUA URL DO SCRIPT AQUI
     let rawData = [];
     let charts = {};
 
@@ -101,7 +75,7 @@
             rawData = await res.json();
             document.getElementById('splash').style.display = 'none';
             updateDashboard();
-        } catch (e) { alert("Erro ao carregar dados!"); }
+        } catch (e) { console.error(e); }
     }
 
     function updateDashboard() {
@@ -110,14 +84,9 @@
         const valStatus = document.getElementById('fStatus').value;
 
         const data = rawData.filter(d => {
-            // Lógica de Data (baseada na coluna data_e_hora_de_inicio)
-            let dateMatch = true;
-            if(valData) {
-                const dPart = d.data_e_hora_de_inicio.split(' '); // Tenta pegar a data
-                dateMatch = d.data_e_hora_de_inicio.includes(valData);
-            }
-            const manutMatch = valManut ? d.manutencao === valManut : true;
-            const statusMatch = valStatus ? d.status === valStatus : true;
+            let dateMatch = valData ? String(d.data_e_hora_de_inicio).includes(valData) : true;
+            let manutMatch = valManut ? d.manutencao === valManut : true;
+            let statusMatch = valStatus ? d.status === valStatus : true;
             return dateMatch && manutMatch && statusMatch;
         });
 
@@ -130,9 +99,7 @@
 
         document.getElementById('kTotal').innerText = total;
         document.getElementById('kAbertas').innerText = abertas;
-        document.getElementById('pAbertas').innerText = ((abertas/total)*100 || 0).toFixed(1) + "%";
         document.getElementById('kFechadas').innerText = fechadas;
-        document.getElementById('pFechadas').innerText = ((fechadas/total)*100 || 0).toFixed(1) + "%";
         document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL'});
         document.getElementById('kHH').innerText = hh.toFixed(1);
 
@@ -142,60 +109,68 @@
     function renderCharts(data) {
         Object.values(charts).forEach(c => c.destroy());
 
-        // 1. HH por Sistema (Barra Vertical)
-        const sist = sumBy(data, "sistema", "hh");
+        // Gráfico 1: HH Mensal por Sistema (Vertical + Sort)
+        const sistSum = sumAndSort(data, "sistema", "hh");
         charts.cHH = new Chart(document.getElementById('cHH'), {
             type: 'bar',
-            data: { labels: Object.keys(sist), datasets: [{ label: 'Horas', data: Object.values(sist), backgroundColor: '#005697' }] }
+            data: { labels: sistSum.labels, datasets: [{ label: 'Horas', data: sistSum.values, backgroundColor: '#005697' }] }
         });
 
-        // 2. Prioridade (Barra Horizontal)
-        const prio = countBy(data, "prioridade");
+        // Gráfico 2: Prioridade (Horizontal + Sort)
+        const prioCount = countAndSort(data, "prioridade");
         charts.cPrio = new Chart(document.getElementById('cPrio'), {
             type: 'bar',
             options: { indexAxis: 'y' },
-            data: { labels: Object.keys(prio), datasets: [{ label: 'Qtd OC', data: Object.values(prio), backgroundColor: '#FFD700' }] }
+            data: { labels: prioCount.labels, datasets: [{ label: 'Qtd OC', data: prioCount.values, backgroundColor: '#FFD700' }] }
         });
 
-        // 3. Top 10 Equipamentos
-        const equip = countBy(data, "cod_sec_veiculo");
-        const top10 = Object.entries(equip).sort((a,b)=>b[1]-a[1]).slice(0,10);
+        // Gráfico 3: Top 10 Equipamentos (Escala Ajustada)
+        const equipCount = countAndSort(data, "cod_sec_veiculo", 10);
         charts.cEquip = new Chart(document.getElementById('cEquip'), {
             type: 'bar',
-            options: { indexAxis: 'y' },
-            data: { labels: top10.map(x=>x[0]), datasets: [{ label: 'OCs', data: top10.map(x=>x[1]), backgroundColor: '#002D5E' }] }
+            options: { 
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                scales: { y: { ticks: { autoSkip: false, font: { size: 10 } } } } 
+            },
+            data: { labels: equipCount.labels, datasets: [{ label: 'OCs', data: equipCount.values, backgroundColor: '#002D5E' }] }
         });
 
-        // 4. HH por CC
-        const ccHH = sumBy(data, "centro_resultado", "hh");
+        // Gráfico 4: HH por Centro de Custo
+        const ccHH = sumAndSort(data, "centro_resultado", "hh");
         charts.cHHCC = new Chart(document.getElementById('cHHCC'), {
             type: 'bar',
             options: { indexAxis: 'y' },
-            data: { labels: Object.keys(ccHH), datasets: [{ label: 'HH', data: Object.values(ccHH), backgroundColor: '#005697' }] }
+            data: { labels: ccHH.labels, datasets: [{ label: 'HH Total', data: ccHH.values, backgroundColor: '#005697' }] }
         });
 
-        // 5. % OS por CC (Pizza)
-        const ccPizza = countBy(data, "centro_resultado");
+        // Gráfico 5: % Sistemas por OS (Pizza)
+        const sistPizza = countAndSort(data, "sistema");
         charts.cPizza = new Chart(document.getElementById('cPizza'), {
             type: 'pie',
-            data: { labels: Object.keys(ccPizza), datasets: [{ data: Object.values(ccPizza), backgroundColor: ['#002D5E', '#005697', '#FFD700', '#e74c3c', '#2ecc71'] }] }
+            data: { labels: sistPizza.labels, datasets: [{ data: sistPizza.values, backgroundColor: ['#002D5E', '#005697', '#FFD700', '#e74c3c', '#2ecc71', '#9b59b6'] }] }
         });
     }
 
-    function sumBy(arr, key, sumKey) {
-        return arr.reduce((acc, d) => {
-            const k = d[key] || "Outros";
+    // Funções de Processamento
+    function sumAndSort(arr, key, sumKey) {
+        const map = arr.reduce((acc, d) => {
+            const k = d[key] || "N/A";
             acc[k] = (acc[k] || 0) + (d[sumKey] || 0);
             return acc;
         }, {});
+        const sorted = Object.entries(map).sort((a,b) => b[1] - a[1]);
+        return { labels: sorted.map(x=>x[0]), values: sorted.map(x=>x[1]) };
     }
 
-    function countBy(arr, key) {
-        return arr.reduce((acc, d) => {
-            const k = d[key] || "Outros";
+    function countAndSort(arr, key, limit = 99) {
+        const map = arr.reduce((acc, d) => {
+            const k = d[key] || "N/A";
             acc[k] = (acc[k] || 0) + 1;
             return acc;
         }, {});
+        const sorted = Object.entries(map).sort((a,b) => b[1] - a[1]).slice(0, limit);
+        return { labels: sorted.map(x=>x[0]), values: sorted.map(x=>x[1]) };
     }
 
     init();
