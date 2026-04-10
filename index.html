@@ -3,67 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SV MASTER - BI & Checklist Completo</title>
+    <title>SV MASTER - BI & Checklist</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        :root { --sv-blue: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD; }
+        :root { 
+            --sv-blue: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD;
+            --sv-accent: #4CC9F0; --sv-danger: #EF4444; --sv-success: #22C55E;
+        }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.5s; }
-        #splash img { width: 160px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
+        /* Splash Screen Animada */
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.8s; }
+        #splash img { width: 180px; animation: entrance 1.2s ease-out forwards; }
+        @keyframes entrance { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
+        /* Menu Home */
+        #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; text-align: center; }
         .logo-home { width: 220px; margin-bottom: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
-        .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; text-align: center; }
-        .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; color: var(--sv-yellow); }
+        .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
+        .menu-card:active { transform: scale(0.95); background: var(--sv-yellow); color: var(--sv-blue); }
+        .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; color: var(--sv-yellow); }
 
-        .header { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
-        .header img { height: 35px; }
-        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); font-size: 11px; text-transform: uppercase; }
+        /* Navbar */
+        .navbar { background: var(--sv-blue-mid); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
+        .navbar img { height: 35px; }
+        .btn-voltar { background: var(--sv-yellow); border: none; padding: 10px 18px; border-radius: 8px; font-weight: 800; cursor: pointer; color: var(--sv-blue); font-size: 11px; text-transform: uppercase; }
 
-        .screen { display: none; padding: 15px; max-width: 1600px; margin: auto; padding-bottom: 80px; }
-        .active { display: block; }
+        /* Telas */
+        .screen { display: none; padding: 15px; max-width: 1400px; margin: auto; padding-bottom: 80px; }
+        .active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* BI Layout Achatado Original */
-        .filter-section { background: var(--sv-blue-mid); padding: 12px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        .filter-section select, .filter-section input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; }
-        
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
-        .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
-        .kpi-card .value { font-size: 16px; font-weight: 800; margin: 5px 0; color: white; }
+        /* BI Styles */
+        .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        select, input { background: var(--sv-blue); color: white; border: 1.5px solid var(--sv-yellow); padding: 12px; border-radius: 8px; font-size: 14px; width: 100%; outline: none; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+        @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
+        .kpi-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; text-align: center; border-left: 5px solid var(--sv-yellow); }
+        .kpi-card h3 { margin: 0; font-size: 10px; color: var(--sv-yellow); text-transform: uppercase; }
+        .kpi-card .value { font-size: 1.2rem; font-weight: 900; margin: 8px 0; color: white; }
 
-        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; margin-bottom: 15px; }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
-        .chart-header h4 { margin: 0; color: var(--sv-yellow); font-size: 11px; text-transform: uppercase; }
-        
-        /* Botões Drill-down */
-        .drill-selectors { display: flex; gap: 2px; background: #001d3d; padding: 2px; border-radius: 6px; }
-        .drill-btn { background: none; border: none; color: #888; padding: 5px 8px; font-size: 9px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
-        .drill-btn.active { background: var(--sv-yellow); color: #001d3d; }
+        /* ESTILO DOS SELETORES NOS GRÁFICOS */
+        .chart-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; }
+        .drill-selectors { display: flex; gap: 4px; background: rgba(0,0,0,0.3); padding: 3px; border-radius: 6px; }
+        .drill-btn { background: none; border: none; color: #888; padding: 4px 8px; font-size: 9px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
+        .drill-btn.active { background: var(--sv-yellow); color: var(--sv-blue); }
 
-        .canvas-wrapper { position: relative; height: 280px; width: 100%; }
+        .charts-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 992px) { .charts-container { grid-template-columns: 1fr 1fr; } }
+        .chart-card { background: var(--sv-blue-mid); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
+        .chart-card h4 { margin: 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; }
+        .canvas-wrapper { position: relative; height: 300px; width: 100%; }
+
+        /* Checklist Styles */
+        .category-block { background: white; border-radius: 12px; margin: 15px 0; overflow: hidden; color: #333; }
+        .category-title { background: #f1f3f6; font-weight: 800; padding: 12px 18px; font-size: 12px; border-bottom: 2px solid #e1e5eb; color: var(--sv-blue-mid); }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #eee; }
+        .res-check { width: auto; min-width: 90px; padding: 8px; border: 2px solid #cbd5e1; border-radius: 8px; }
 
         /* Modal */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; padding: 10px; overflow-y: auto; }
-        .modal-content { background: white; color: #333; border-radius: 10px; padding: 15px; width: 100%; max-width: 1000px; margin: auto; }
-        .modal-chart-area { height: 400px; width: 100%; }
-        .table-responsive { overflow-x: auto; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; min-width: 600px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-
-        /* Checklist Styles (Preservado) */
-        .category-block { background: white; border-radius: 10px; margin: 15px 0; border: 2px solid #e1e5eb; overflow: hidden; color: #333; }
-        .category-title { background: #f1f3f6; font-weight: 800; padding: 10px 15px; font-size: 12px; border-bottom: 2px solid #e1e5eb; color: var(--sv-blue-mid); }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #eee; }
-        .res-check { width: auto; min-width: 85px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; }
-        label { display: block; margin: 15px 0 5px; font-weight: 700; color: var(--sv-yellow); font-size: 0.85rem; text-transform: uppercase; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 10001; padding: 15px; overflow-y: auto; }
+        .modal-content { background: white; color: #333; border-radius: 16px; padding: 25px; max-width: 1200px; margin: auto; }
+        #modalChartArea { height: 400px; width: 100%; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 12px; }
+        th, td { border-bottom: 1px solid #eee; padding: 12px; text-align: left; }
     </style>
 </head>
 <body>
@@ -79,38 +87,41 @@
 </div>
 
 <div id="screen-checklist" class="screen">
-    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     <div style="max-width: 500px; margin: auto; padding-top: 20px;">
-        <label>OPERADOR</label>
-        <input type="text" id="operador" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;">
-        <label>TIPO MÁQUINA</label>
-        <select id="tipoMaquina" onchange="filtraIDs()" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;"><option value="">Selecione...</option></select>
-        <label>ID MÁQUINA</label>
-        <select id="idMaquina" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;"><option value="">Aguardando...</option></select>
-        <button class="btn-voltar" style="width:100%; padding:18px; margin-top:10px;" onclick="irParaChecklist()">INICIAR INSPEÇÃO</button>
+        <label style="color:var(--sv-yellow); font-weight:bold; font-size:11px;">OPERADOR</label>
+        <input type="text" id="operador" placeholder="Nome do Responsável">
+        <label style="color:var(--sv-yellow); font-weight:bold; font-size:11px;">TIPO MÁQUINA</label>
+        <select id="tipoMaquina" onchange="filtraIDs()"><option value="">Selecione...</option></select>
+        <label style="color:var(--sv-yellow); font-weight:bold; font-size:11px;">ID MÁQUINA</label>
+        <select id="idMaquina"><option value="">Aguardando...</option></select>
+        <button onclick="irParaChecklist()" class="btn-voltar" style="width:100%; padding:18px; margin-top:10px; font-size:14px;">INICIAR INSPEÇÃO</button>
+        <button onclick="showScreen('dash-check')" class="btn-voltar" style="width:100%; padding:15px; margin-top:20px; background:rgba(255,255,255,0.1); color:white; border: 1px solid rgba(255,255,255,0.2);">INDICADORES CHECKLIST</button>
     </div>
 </div>
 
 <div id="screen-exec" class="screen">
-    <div id="banner" style="text-align:center; padding:15px; font-weight:bold; color:var(--sv-yellow); background: var(--sv-blue-mid); border-radius: 10px; margin-bottom: 10px;"></div>
+    <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center; border: 1px solid var(--sv-yellow);"></div>
     <div id="checklistArea"></div>
-    <button class="btn-voltar" style="width:100%; padding:20px; font-size: 16px; margin-top:15px;" onclick="salvarChecklist()">FINALIZAR E ENVIAR</button>
+    <label style="color:var(--sv-yellow); font-weight:bold; font-size:11px;">OBSERVAÇÕES</label>
+    <textarea id="obs" rows="3" style="width:100%; background:var(--sv-blue); color:white; border:1px solid var(--sv-yellow); border-radius:10px; padding:15px;"></textarea>
+    <button id="btnSalvar" onclick="salvarChecklist()" style="width:100%; background:var(--sv-yellow); border:none; padding:20px; border-radius:10px; font-weight:800; margin-top:15px; color:var(--sv-blue); font-size:16px;">FINALIZAR E ENVIAR</button>
 </div>
 
 <div id="screen-bi" class="screen">
-    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     
     <div class="filter-section" style="margin-top:20px;">
-        <input type="month" id="fData" onchange="updateDashboard()">
-        <select id="fManut" onchange="updateDashboard()"><option value="">Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
-        <select id="fStatus" onchange="updateDashboard()"><option value="">Status</option><option value="Finalizada">Finalizadas</option><option value="Aberta">Abertas</option></select>
-        <button class="btn-voltar" style="background:#27ae60; color:white;" onclick="exportPDF()">PDF</button>
+        <input type="month" id="fDataBI" onchange="updateDashboardBI()">
+        <select id="fManutBI" onchange="updateDashboardBI()"><option value="">Manutenções: Todas</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
+        <select id="fStatusBI" onchange="updateDashboardBI()"><option value="">Status: Todos</option><option value="Finalizada">Finalizada</option><option value="Aberta">Aberta</option></select>
+        <button onclick="exportPDF()" style="background:var(--sv-success); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">PDF</button>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:red">0</div></div>
-        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
+        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:var(--sv-danger)">0</div></div>
+        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:var(--sv-success)">0</div></div>
         <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
         <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
         <div class="kpi-card"><h3>MÉDIA/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
@@ -119,73 +130,69 @@
 
     <div class="charts-container" id="pdfArea">
         <div class="chart-card">
-            <div class="chart-header">
+            <div class="chart-header-row">
                 <h4>Pareto: Volume OS / Sistema</h4>
                 <div class="drill-selectors">
-                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'count')">OC</button>
-                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'count')">Operação</button>
+                    <button class="drill-btn active" data-mode="oc" onclick="setDrill(this, 'oc', 'count')">OC</button>
+                    <button class="drill-btn" data-mode="op" onclick="setDrill(this, 'op', 'count')">Operação</button>
                 </div>
             </div>
             <div class="canvas-wrapper"><canvas id="cPareto"></canvas></div>
         </div>
 
         <div class="chart-card">
-            <div class="chart-header">
-                <h4>HH Acumulado por Sistema</h4>
+            <div class="chart-header-row">
+                <h4>HH Acumulado / Sistema</h4>
                 <div class="drill-selectors">
-                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'sum', 'hh')">OC</button>
-                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'sum', 'hh')">Operação</button>
+                    <button class="drill-btn active" data-mode="oc" onclick="setDrill(this, 'oc', 'sum', 'hh')">OC</button>
+                    <button class="drill-btn" data-mode="op" onclick="setDrill(this, 'op', 'sum', 'hh')">Operação</button>
                 </div>
             </div>
             <div class="canvas-wrapper"><canvas id="cHH"></canvas></div>
         </div>
 
-        <div class="chart-card">
-            <div class="chart-header"><h4>Tendência Mensal</h4></div>
-            <div class="canvas-wrapper"><canvas id="cTrend"></canvas></div>
-        </div>
+        <div class="chart-card"><h4>Tendência Mensal</h4><div class="canvas-wrapper"><canvas id="cTrend"></canvas></div></div>
 
         <div class="chart-card">
-            <div class="chart-header">
+            <div class="chart-header-row">
                 <h4>Top 10 Custo Equipamento</h4>
                 <div class="drill-selectors">
-                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'sum', 'produtos')">OC</button>
-                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'sum', 'produtos')">Operação</button>
+                    <button class="drill-btn active" data-mode="oc" onclick="setDrill(this, 'oc', 'sum', 'produtos')">OC</button>
+                    <button class="drill-btn" data-mode="op" onclick="setDrill(this, 'op', 'sum', 'produtos')">Operação</button>
                 </div>
             </div>
             <div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div>
         </div>
 
         <div class="chart-card">
-            <div class="chart-header">
+            <div class="chart-header-row">
                 <h4>Top 10 Freq. Equipamento</h4>
                 <div class="drill-selectors">
-                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'count')">OC</button>
-                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'count')">Operação</button>
+                    <button class="drill-btn active" data-mode="oc" onclick="setDrill(this, 'oc', 'count')">OC</button>
+                    <button class="drill-btn" data-mode="op" onclick="setDrill(this, 'op', 'count')">Operação</button>
                 </div>
             </div>
             <div class="canvas-wrapper"><canvas id="cEquipFreq"></canvas></div>
         </div>
 
-        <div class="chart-card">
-            <div class="chart-header"><h4>HH por Sistema (Horiz)</h4></div>
-            <div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div>
-        </div>
-
-        <div class="chart-card">
-            <div class="chart-header"><h4>Distribuição % Sistemas</h4></div>
-            <div class="canvas-wrapper"><canvas id="cPizza"></canvas></div>
-        </div>
+        <div class="chart-card"><h4>HH por Sistema (Ranking)</h4><div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div></div>
+        <div class="chart-card"><h4>Distribuição % Sistemas</h4><div class="canvas-wrapper"><canvas id="cPizzaBI"></canvas></div></div>
     </div>
+</div>
+
+<div id="screen-dash-check" class="screen">
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="showScreen('checklist')">VOLTAR</button></div>
+    <div class="chart-card" style="margin-top:20px; background:white;"><h4 style="color:var(--sv-blue); border-bottom:1px solid #eee;">Status Itens (OK x NOK)</h4><canvas id="chartPizzaCheck" height="280"></canvas></div>
+    <div class="chart-card" style="background:white;"><h4 style="color:var(--sv-blue); border-bottom:1px solid #eee;">Top 5 Falhas Apontadas</h4><canvas id="chartBarrasCheck" height="280"></canvas></div>
 </div>
 
 <div id="modal">
     <div class="modal-content">
-        <button onclick="closeModal()" style="float:right; background:red; color:white; border:none; padding:8px; border-radius:5px;">X</button>
-        <h3 id="modalTitle">DETALHES</h3>
-        <div id="modalChart" style="display:none;" class="modal-chart-area"><canvas id="cPopUp"></canvas></div>
-        <div id="modalTable" class="table-responsive">
-            <table><thead><tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Valor</th><th>HH</th><th>Operação</th></tr></thead><tbody id="modalBody"></tbody></table>
+        <button onclick="closeModal()" style="float:right; background:var(--sv-danger); color:white; border:none; padding:8px 12px; border-radius:5px; font-weight:800;">X</button>
+        <h3 id="modalTitle" style="color:var(--sv-blue-mid); margin-top:0;">DETALHES</h3>
+        <div id="modalChartArea" style="display:none;"><canvas id="cPopUp"></canvas></div>
+        <div id="modalTableArea" style="overflow-x:auto;">
+            <table><thead><tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Valor</th><th>HH</th><th>Status</th></tr></thead><tbody id="modalBody"></tbody></table>
         </div>
     </div>
 </div>
@@ -193,15 +200,15 @@
 <script>
     const URL_CHECKLIST = "https://script.google.com/macros/s/AKfycbxXLqXBs3Of8h2TE1I2B61NfcJVONzHe45wGpzRaXlHdSAnBsdrZ67aALUjiN3DVj1z/exec";
     const URL_BI = "https://script.google.com/macros/s/AKfycbyvjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
-    const KEY_OP = "Descrição (Centros de Resultado)";
+    const COL_OPERACAO = "Descrição (Centros de Resultado)";
 
-    let rawBI = [], dMaquinas = [], dItens = [], charts = {}, drillMode = 'oc', drillMetric = 'count', drillSumKey = null;
+    let rawBI = [], dMaquinas = [], dItens = [], dHistorico = [], charts = {};
     Chart.register(ChartDataLabels);
 
     window.onload = async () => {
         try {
             const resC = await fetch(URL_CHECKLIST); const dataC = await resC.json();
-            dMaquinas = dataC.maquinas; dItens = dataC.itens;
+            dMaquinas = dataC.maquinas; dItens = dataC.itens; dHistorico = dataC.historico;
             const selT = document.getElementById('tipoMaquina');
             [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
             document.getElementById('splash').style.display = 'none';
@@ -211,92 +218,109 @@
     function showScreen(id) {
         document.querySelectorAll('.screen, #screen-home').forEach(s => s.style.display = 'none');
         document.getElementById('screen-' + id).style.display = 'block';
+        document.getElementById('screen-' + id).classList.add('active');
         if(id === 'bi') loadBI();
+        if(id === 'dash-check') renderDashCheck();
     }
 
-    function setDrillMode(btn, mode, metric = 'count', sumKey = null) {
-        btn.parentElement.querySelectorAll('.drill-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active'); 
-        drillMode = mode; drillMetric = metric; drillSumKey = sumKey;
+    // --- LÓGICA DRILL-DOWN ---
+    function setDrill(btn, mode, metric, sumKey) {
+        const parent = btn.closest('.drill-selectors');
+        parent.querySelectorAll('.drill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Salvamos as configurações no card para o clique no gráfico ler
+        const card = btn.closest('.chart-card');
+        card.dataset.drillMode = mode;
+        card.dataset.drillMetric = metric;
+        card.dataset.drillSumKey = sumKey || "";
     }
 
+    // --- BI GESTÃO ---
     async function loadBI() {
         if(rawBI.length === 0) { const res = await fetch(URL_BI); rawBI = await res.json(); }
-        updateDashboard();
+        updateDashboardBI();
     }
 
-    function updateDashboard() {
-        const fD = document.getElementById('fData').value, fM = document.getElementById('fManut').value, fS = document.getElementById('fStatus').value;
-        const data = rawBI.filter(d => (fD ? String(d.data_e_hora_de_inicio).includes(fD) : true) && (fM ? d.manutencao === fM : true) && (fS ? d.status === fS : true));
+    function updateDashboardBI() {
+        const fData = document.getElementById('fDataBI').value, fManut = document.getElementById('fManutBI').value, fStatus = document.getElementById('fStatusBI').value;
+        const data = rawBI.filter(d => (fData ? String(d.data_e_hora_de_inicio).includes(fData) : true) && (fManut ? d.manutencao === fManut : true) && (fStatus ? d.status === fStatus : true));
         
-        const custo = data.reduce((a, b) => a + (b.produtos || 0), 0);
-        const hh = data.reduce((a, b) => a + (b.hh || 0), 0);
-        
+        const custo = data.reduce((acc, d) => acc + (d.produtos || 0), 0), hh = data.reduce((acc, d) => acc + (d.hh || 0), 0);
         document.getElementById('kTotal').innerText = data.length;
-        document.getElementById('kAbertas').innerText = data.filter(x => x.status === 'Aberta').length;
-        document.getElementById('kFechadas').innerText = data.filter(x => x.status === 'Finalizada').length;
-        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+        document.getElementById('kAbertas').innerText = data.filter(d => d.status === 'Aberta').length;
+        document.getElementById('kFechadas').innerText = data.filter(d => d.status === 'Finalizada').length;
+        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
         document.getElementById('kHH').innerText = Math.round(hh) + "h";
         document.getElementById('kAvg').innerText = (custo/data.length || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
         document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-
         renderChartsBI(data);
     }
 
     function renderChartsBI(data) {
-        const ids = ['cPareto','cHH','cTrend','cCustoEquip','cEquipFreq','cHHHoriz','cPizza'];
-        ids.forEach(id => { if(charts[id]) charts[id].destroy(); });
-
-        const cfg = (isM=false) => ({
+        Object.values(charts).forEach(c => { if(!c.canvas.id.includes('Check')) c.destroy(); });
+        const colors = ['#FFD60A', '#4CC9F0', '#4361EE', '#7209B7', '#F72585', '#3A0CA3', '#EF4444', '#22C55E'];
+        
+        const cfg = (m=false) => ({
             maintainAspectRatio: false,
-            plugins: { datalabels: { color: '#fff', font:{weight:'bold', size:9}, anchor: 'end', align: 'top', formatter: v => isM ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) }, legend:{display:false} },
-            onClick: (e, activeEls) => { if(activeEls.length > 0) handleDrill(data, e.chart.data.labels[activeEls[0].index]); },
-            scales: { y: { ticks: { color: '#aaa', font:{size:9}} }, x: { ticks: { color: '#fff', font:{size:9}} } }
+            plugins: { 
+                datalabels: { color: '#fff', font:{weight:'bold', size:10}, anchor: 'end', align: 'top', formatter: v => m ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) }, 
+                legend:{display:false} 
+            },
+            onClick: (e, activeEls) => { if(activeEls.length > 0) handleDrill(data, e.chart.data.labels[activeEls[0].index], e.chart.canvas.closest('.chart-card')); },
+            scales: { y: { ticks: { color: '#aaa', font: {size: 9} }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#fff', font: {size: 9} } } }
         });
 
-        charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
-        charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
-        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)', tension:0.3}] }, options:cfg() });
-        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#EF4444'}] }, options:{...cfg(true), indexAxis:'y'} });
-        charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",null,10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",null,10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
-        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:colors[0]}] }, options:cfg() });
+        charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:colors[1]}] }, options:cfg() });
+        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:colors[0], fill:true, backgroundColor:'rgba(255,214,10,0.1)', tension:0.4}] }, options:cfg() });
+        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:colors[4]}] }, options:{...cfg(true), indexAxis:'y'} });
+        charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",null,10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",null,10).v, backgroundColor:colors[1]}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:colors[3]}] }, options:{...cfg(), indexAxis:'y'} });
         
         const pz = processPizza(data, "sistema");
-        charts.cPizza = new Chart(document.getElementById('cPizza'), { type:'pie', data:{ labels:pz.l, datasets:[{data:pz.v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{color:'#fff', font:{size:8}}}, datalabels:{color:'#fff', font:{weight:'bold'}} } } });
+        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { 
+            type:'pie', data:{ labels:pz.l, datasets:[{data:pz.v, backgroundColor:colors}] }, 
+            options:{ maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{color:'#fff', font:{size:8}}}, datalabels:{color:'#fff', font:{weight:'bold'}} } } 
+        });
     }
 
-    function handleDrill(data, label) {
+    function handleDrill(data, label, card) {
+        const mode = card.dataset.drillMode || 'oc';
+        const metric = card.dataset.drillMetric || 'count';
+        const sumKey = card.dataset.drillSumKey || null;
         const sub = data.filter(d => d.sistema === label || d.cod_sec_veiculo === label);
+        
         document.getElementById('modalTitle').innerText = label;
 
-        if (drillMode === 'oc') {
-            document.getElementById('modalChart').style.display = 'none';
-            document.getElementById('modalTable').style.display = 'block';
-            document.getElementById('modalBody').innerHTML = sub.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td>${d[KEY_OP] || 'N/A'}</td></tr>`).join('');
+        if (mode === 'oc') {
+            document.getElementById('modalChartArea').style.display = 'none';
+            document.getElementById('modalTableArea').style.display = 'block';
+            document.getElementById('modalBody').innerHTML = sub.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.data_e_hora_de_inicio}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos).toLocaleString('pt-br')}</td><td>${Math.round(d.hh)}h</td><td>${d.status}</td></tr>`).join('');
         } else {
-            document.getElementById('modalTable').style.display = 'none';
-            document.getElementById('modalChart').style.display = 'block';
+            document.getElementById('modalTableArea').style.display = 'none';
+            document.getElementById('modalChartArea').style.display = 'block';
             if(charts.cPopUp) charts.cPopUp.destroy();
             
-            const popD = sort(sub, KEY_OP, drillMetric, drillSumKey);
-            const isMoney = (drillSumKey === 'produtos');
+            const popD = sort(sub, COL_OPERACAO, metric, sumKey);
+            const labelMetric = metric === 'count' ? 'Qtd OC' : (sumKey === 'hh' ? 'Horas' : 'Custo R$');
 
             charts.cPopUp = new Chart(document.getElementById('cPopUp'), {
                 type: 'bar',
-                data: { labels: popD.l, datasets: [{ data: popD.v, backgroundColor: '#FFD60A' }] },
+                data: { labels: popD.l, datasets: [{ label: labelMetric, data: popD.v, backgroundColor: '#003566', borderRadius: 8 }] },
                 options: { 
                     maintainAspectRatio: false, 
                     plugins: { 
                         legend: { display: false },
-                        datalabels: { color: '#333', font:{weight:'bold'}, formatter: v => isMoney ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) } 
-                    } 
+                        datalabels: { color: '#333', font:{weight:'bold'}, formatter: v => sumKey === 'produtos' ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) } 
+                    },
+                    scales: { y: { beginAtZero: true } }
                 }
             });
         }
         document.getElementById('modal').style.display = 'block';
     }
 
-    // Utilitários
+    // --- CHECKLIST & UTILS ---
     function processPizza(arr, key) {
         const m = arr.reduce((acc, d) => { const x = d[key] || "N/A"; acc[x] = (acc[x] || 0) + 1; return acc; }, {});
         const total = Object.values(m).reduce((a, b) => a + b, 0);
@@ -305,23 +329,41 @@
         if (others > 0) { finalL.push("Outros"); finalV.push(others); }
         return { l: finalL, v: finalV };
     }
-
     function sort(arr, k, type, sK, l=99) {
         const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {});
         const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l);
         return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) };
     }
-    
     function trend(arr) {
         const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {});
         const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) };
     }
-
-    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = ''; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
-    function irParaChecklist() { document.getElementById('screen-checklist').style.display = 'none'; document.getElementById('screen-exec').style.display = 'block'; }
-    async function salvarChecklist() { location.reload(); }
+    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = '<option value="">Selecione...</option>'; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
+    function irParaChecklist() {
+        const id = document.getElementById('idMaquina').value, t = document.getElementById('tipoMaquina').value;
+        if(!id) return alert("Selecione a máquina!");
+        const itensF = dItens.filter(i => i.tipo_maquina.toString().toLowerCase() === t.toLowerCase());
+        const maq = dMaquinas.find(m => m.id_maquina === id);
+        document.getElementById('banner').innerText = `ID: ${id} | PLACA: ${maq.placa}`;
+        const area = document.getElementById('checklistArea'); area.innerHTML = "";
+        [...new Set(itensF.map(i => i.categoria))].forEach(c => {
+            let h = `<div class="category-block"><div class="category-title">${c}</div>`;
+            itensF.filter(i => i.categoria === c).forEach(it => { h += `<div class="item-row"><span>${it.item}</span><select class="res-check" data-name="${it.item}"><option value="OK">OK</option><option value="NOK">NOK</option></select></div>`; });
+            area.innerHTML += h + `</div>`;
+        });
+        showScreen('exec');
+    }
+    async function salvarChecklist() { const btn = document.getElementById('btnSalvar'); btn.disabled = true; const resps = Array.from(document.querySelectorAll('.res-check')).map(s => ({ item: s.dataset.name, status: s.value })); const payload = { operador: document.getElementById('operador').value, idMaquina: document.getElementById('idMaquina').value, respostas: resps, observacao: document.getElementById('obs').value }; await fetch(URL_CHECKLIST, { method:'POST', mode:'no-cors', body:JSON.stringify(payload) }); alert("✅ Enviado!"); location.reload(); }
+    function renderDashCheck() {
+        let ok = 0, nok = 0, ranking = {}; dHistorico.forEach(f => { if(f.status === "OK") ok++; else { nok++; ranking[f.item] = (ranking[f.item] || 0) + 1; } });
+        if(charts.cPCheck) charts.cPCheck.destroy();
+        charts.cPCheck = new Chart(document.getElementById('chartPizzaCheck'), { type:'pie', data:{ labels:['OK','NOK'], datasets:[{data:[ok,nok], backgroundColor:['#22C55E','#EF4444']}] }, options:{ plugins:{ datalabels:{color:'#fff', font:{weight:'bold'}} } } });
+        const sorted = Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        if(charts.cBCheck) charts.cBCheck.destroy();
+        charts.cBCheck = new Chart(document.getElementById('chartBarrasCheck'), { type:'bar', data:{ labels:sorted.map(i=>i[0]), datasets:[{data:sorted.map(i=>i[1]), backgroundColor:'#003566'}] }, options: { indexAxis:'y', plugins:{legend:{display:false}, datalabels:{color:'#fff'}} } });
+    }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:2, filename:'BI_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
+    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:5, filename:'PCM_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
 </script>
 </body>
 </html>
