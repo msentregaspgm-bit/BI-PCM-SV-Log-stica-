@@ -3,109 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BI PCM SV LOGÍSTICA</title>
+    <title>Dashboard PCM SV</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --blue: #005697; --yellow: #FDB813; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; }
-        #loader { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--blue); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999; color: white; transition: 0.5s; }
-        .container { max-width: 1200px; margin: auto; padding: 20px; display: none; }
-        .header { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-left: 10px solid var(--yellow); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .card .value { font-size: 2.2rem; font-weight: 800; color: var(--blue); margin-top: 10px; }
-        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; }
-        .chart-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        #err-display { display: none; background: #fee2e2; color: #b91c1c; padding: 20px; margin: 20px; border-radius: 10px; border: 1px solid #f87171; text-align: center; }
+        :root { --blue: #005697; --yellow: #FDB813; }
+        body { font-family: sans-serif; background: #f1f5f9; margin: 0; padding: 20px; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--blue); color: white; display: flex; justify-content: center; align-items: center; z-index: 100; font-weight: bold; }
+        .container { max-width: 1200px; margin: auto; display: none; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; margin-bottom: 20px; }
+        .value { font-size: 2rem; font-weight: bold; color: var(--blue); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        #error-msg { background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; display: none; margin-bottom: 20px; border: 1px solid #f87171; }
     </style>
 </head>
 <body>
 
-<div id="loader">
-    <h1 style="margin:0">SV LOGÍSTICA</h1>
-    <p>CARREGANDO PCM INTELLIGENCE...</p>
-</div>
-
-<div id="err-display"></div>
+<div id="loader">CARREGANDO DADOS SV LOGÍSTICA...</div>
 
 <div class="container" id="app">
-    <div class="header">
-        <h1 style="margin:0; color:var(--blue); font-size: 1.5rem;">PORTAL BI PCM SV</h1>
-        <button onclick="location.reload()" style="background:var(--blue); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold;">ATUALIZAR</button>
+    <div id="error-msg"></div>
+    <div class="card" style="border-left: 10px solid var(--yellow); text-align: left;">
+        <h2 style="margin: 0; color: var(--blue);">BI PCM - CONTROLE DE FROTA</h2>
     </div>
 
-    <div class="kpi-grid">
+    <div class="grid">
         <div class="card"><h3>Total OS</h3><div id="vTotal" class="value">0</div></div>
-        <div class="card"><h3>Abertas</h3><div id="vAbertas" class="value" style="color:red">0</div></div>
-        <div class="card"><h3>Investimento</h3><div id="vCusto" class="value" style="color:green">R$ 0</div></div>
-        <div class="card"><h3>Prioridade 1</h3><div id="vAlta" class="value">0</div></div>
+        <div class="card"><h3>OS Abertas</h3><div id="vAbertas" class="value" style="color:red">0</div></div>
+        <div class="card"><h3>Investimento Peças</h3><div id="vCusto" class="value" style="color:green">R$ 0</div></div>
     </div>
 
-    <div class="chart-grid">
-        <div class="chart-box"><h4>Sistemas Críticos</h4><canvas id="chartSist" height="300"></canvas></div>
-        <div class="chart-box"><h4>Mix Manutenção</h4><canvas id="chartMix" height="300"></canvas></div>
+    <div class="grid" style="margin-top: 20px;">
+        <div class="card"><h4>Falhas por Sistema</h4><canvas id="chartSist"></canvas></div>
+        <div class="card"><h4>Mix de Manutenção</h4><canvas id="chartMix"></canvas></div>
     </div>
 </div>
 
 <script>
-    // ⚠️ ATENÇÃO: COLE SEU LINK ABAIXO:
-    const URL_API = "https://script.google.com/macros/s/AKfycbwGuD2NG1pm2OIaMYTmKc4P-byuFoRapLIxZsjvp2QVS5-3_uM4ShPM-vqSxgy88EVISw/exec";
+    // ⚠️ COLOQUE SEU LINK DO GOOGLE ABAIXO
+    const URL_API = "https://script.google.com/macros/s/AKfycbxe8I8JWXC7u7tgOrctDSQS8tvphLVLpaAyw6G5xdmCn6OwlJmo1-a-I4nL41XlXX8QwQ/exec";
 
-    async function fetchData() {
+    async function start() {
         try {
-            const response = await fetch(URL_API);
+            const res = await fetch(URL_API);
+            const text = await res.text();
 
-            if (!response.ok) throw new Error("Erro na rede.");
-
-            // Pegamos como texto primeiro para evitar o erro de sintaxe
-            const text = await response.text();
-            
-            // Verificamos se o que veio é um JSON ou uma página de erro do Google
             if (text.trim().startsWith("<")) {
-                throw new Error("O Google retornou uma página HTML em vez de dados. Verifique se a implantação está como 'Qualquer Pessoa'.");
+                throw new Error("O Google bloqueou o acesso. Verifique se a implantação está como 'Qualquer Pessoa'.");
             }
 
             const data = JSON.parse(text);
-
-            if (data.error) throw new Error(data.error);
-
             render(data);
             document.getElementById('app').style.display = 'block';
         } catch (e) {
-            const errDiv = document.getElementById('err-display');
-            errDiv.style.display = 'block';
-            errDiv.innerHTML = "<b>Falha ao carregar dados:</b><br>" + e.message;
+            const err = document.getElementById('error-msg');
+            err.style.display = 'block';
+            err.innerHTML = "<b>Erro:</b> " + e.message;
         } finally {
             document.getElementById('loader').style.display = 'none';
         }
     }
 
     function render(dados) {
-        const abertas = dados.filter(o => String(o.status).toLowerCase().includes('aberta')).length;
-        const alta = dados.filter(o => String(o.prioridade).includes('1')).length;
-        const custo = dados.reduce((acc, o) => acc + (Number(o.produtos) || 0), 0);
+        // Usa os nomes exatos das suas colunas (conforme sua planilha CSV)
+        const total = dados.length;
+        const abertas = dados.filter(o => String(o['Status']).toLowerCase() === 'aberta').length;
+        const custo = dados.reduce((acc, o) => acc + (Number(o['Produtos']) || 0), 0);
 
-        document.getElementById('vTotal').innerText = dados.length;
+        document.getElementById('vTotal').innerText = total;
         document.getElementById('vAbertas').innerText = abertas;
-        document.getElementById('vAlta').innerText = alta;
         document.getElementById('vCusto').innerText = custo.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
 
-        const sMap = {}; dados.forEach(o => { const s = o.sistema || "Geral"; sMap[s] = (sMap[s] || 0) + 1; });
+        // Gráfico Sistemas
+        const sMap = {}; 
+        dados.forEach(o => { const s = o['Sistema'] || "Outros"; sMap[s] = (sMap[s] || 0) + 1; });
         const labels = Object.entries(sMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
         new Chart(document.getElementById('chartSist'), {
             type: 'bar', 
             data: { labels: labels.map(l=>l[0]), datasets:[{label:'OS', data:labels.map(l=>l[1]), backgroundColor:'#005697'}] },
-            options: { indexAxis: 'y', plugins: { legend: {display:false} } }
+            options: { indexAxis: 'y' }
         });
 
-        const tMap = {}; dados.forEach(o => { const t = o.manutencao || "Outros"; tMap[t] = (tMap[t] || 0) + 1; });
+        // Gráfico Mix
+        const tMap = {}; 
+        dados.forEach(o => { const t = o['Manutenção'] || "Outros"; tMap[t] = (tMap[t] || 0) + 1; });
         new Chart(document.getElementById('chartMix'), {
             type: 'pie',
-            data: { labels: Object.keys(tMap), datasets:[{data: Object.values(tMap), backgroundColor:['#005697','#FDB813','#ef4444','#10b981','#6366f1']}] }
+            data: { labels: Object.keys(tMap), datasets:[{data: Object.values(tMap), backgroundColor:['#005697','#FDB813','#ef4444','#10b981']}] }
         });
     }
 
-    fetchData();
+    start();
 </script>
 </body>
 </html>
