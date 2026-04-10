@@ -6,76 +6,88 @@
     <title>Portal BI PCM - SV Logística</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
     <style>
         :root { --sv-blue: #005697; --sv-yellow: #FDB813; --bg: #f1f5f9; --dark: #1e293b; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
         
-        /* Splash Screen */
+        /* Splash Screen Profissional */
         #splash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--sv-blue); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999; transition: opacity 0.5s; }
-        #splash img { width: 150px; animation: pulse 2s infinite; }
-        #splash p { color: var(--sv-yellow); font-weight: bold; margin-top: 20px; letter-spacing: 2px; }
-        @keyframes pulse { 0% {transform: scale(0.95); opacity: 0.8;} 50% {transform: scale(1.05); opacity: 1;} 100% {transform: scale(0.95); opacity: 0.8;} }
+        #splash img { width: 140px; animation: pulse 2s infinite; margin-bottom: 20px; }
+        .loader-bar { width: 200px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+        .loader-fill { width: 30%; height: 100%; background: var(--sv-yellow); animation: loading 1.5s infinite; }
+        
+        @keyframes pulse { 0% {transform: scale(0.98);} 50% {transform: scale(1.02);} 100% {transform: scale(0.98);} }
+        @keyframes loading { 0% {margin-left: -30%;} 100% {margin-left: 100%;} }
 
         .container { max-width: 1200px; margin: auto; padding: 20px; }
-        .header { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-left: 10px solid var(--sv-yellow); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .header h1 { margin: 0; color: var(--sv-blue); font-size: 1.5rem; text-transform: uppercase; }
+        
+        /* Header Estilizado */
+        .header { background: white; padding: 25px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-left: 10px solid var(--sv-yellow); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .header h1 { margin: 0; color: var(--sv-blue); font-size: 1.6rem; font-weight: 800; text-transform: uppercase; }
 
-        /* KPI Cards */
+        /* KPIs Estilo Dashboard Moderno */
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; border: 1px solid #e2e8f0; position: relative; }
         .card h3 { margin: 0; color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
-        .card .value { font-size: 2.2rem; font-weight: 800; color: var(--sv-blue); margin-top: 10px; }
+        .card .value { font-size: 2.3rem; font-weight: 800; color: var(--sv-blue); margin-top: 8px; }
         .card.alert .value { color: #ef4444; }
         .card.money .value { color: #10b981; }
 
-        /* Chart Area */
+        /* Area de Gráficos */
         .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; }
         .chart-box { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         .chart-box h4 { margin: 0 0 20px 0; color: var(--sv-blue); font-size: 1rem; text-transform: uppercase; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
-        .canvas-container { position: relative; height: 320px; }
+        .canvas-container { position: relative; height: 350px; }
+
+        .btn-refresh { background: var(--sv-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-refresh:hover { background: #003d6b; }
+
+        @media (max-width: 600px) { .chart-grid { grid-template-columns: 1fr; } .header { flex-direction: column; text-align: center; gap: 15px; } }
     </style>
 </head>
 <body>
 
 <div id="splash">
-    <img src="logo.png" alt="SV">
-    <p>SINCRONIZANDO BI PCM SV...</p>
+    <img src="logo.png" alt="SV Logística">
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+    <p style="color:white; font-weight:bold; margin-top:20px; letter-spacing: 2px;">PROCESSANDO PCM INTELLIGENCE</p>
 </div>
 
 <div class="container">
     <div class="header">
-        <h1>PORTAL BI PCM SV LOGÍSTICA</h1>
-        <div id="relogio" style="font-size: 0.8rem; font-weight: bold; color: #64748b;"></div>
+        <h1>Portal BI PCM <span style="color: #64748b; font-weight: 300;">SV Logística</span></h1>
+        <button class="btn-refresh" onclick="location.reload()">ATUALIZAR DADOS</button>
     </div>
 
     <div class="kpi-grid">
         <div class="card">
-            <h3>Ordens Processadas</h3>
+            <h3>Total de Ordens</h3>
             <div id="kpiTotal" class="value">0</div>
         </div>
         <div class="card alert">
-            <h3>OS Abertas (Backlog)</h3>
+            <h3>Backlog (Abertas)</h3>
             <div id="kpiAbertas" class="value">0</div>
         </div>
         <div class="card money">
-            <h3>Investimento em Peças</h3>
+            <h3>Custo de Peças</h3>
             <div id="kpiCusto" class="value">R$ 0</div>
         </div>
         <div class="card">
-            <h3>OS Urgentes</h3>
+            <h3>Prioridade Alta</h3>
             <div id="kpiAlta" class="value">0</div>
         </div>
     </div>
 
     <div class="chart-grid">
         <div class="chart-box">
-            <h4>Frequência de Falhas por Sistema</h4>
+            <h4>Ranking de Falhas por Sistema</h4>
             <div class="canvas-container">
                 <canvas id="chartPareto"></canvas>
             </div>
         </div>
         <div class="chart-box">
-            <h4>Mix Manutenção (%)</h4>
+            <h4>Mix de Manutenção (%)</h4>
             <div class="canvas-container">
                 <canvas id="chartMix"></canvas>
             </div>
@@ -84,19 +96,24 @@
 </div>
 
 <script>
-    // ⚠️ COLOQUE SUA NOVA URL DO SCRIPT AQUI ABAIXO
-    const URL_API = "https://script.google.com/macros/s/AKfycbw7enUXkafIFp74rn1Cc-kmonzE-rh-skop8vzXDgd06R511V7z4kXYtA2bkcqItjfAvg/exec";
+    // ⚠️ COLOQUE SUA NOVA URL DO SCRIPT ABAIXO
+    const URL_API = "https://script.google.com/macros/s/AKfycbzrFMiIZvL3UdWWwZyZNDJ7UgPJvhxTundhdmM154NkwVQwV9P4AvNsXzSuoAl7Q1c1uQ/exec";
 
     Chart.register(ChartDataLabels);
 
     window.onload = async () => {
-        document.getElementById('relogio').innerText = "DATA: " + new Date().toLocaleDateString('pt-br');
         try {
             const res = await fetch(URL_API);
             const data = await res.json();
+            
+            if (!Array.isArray(data)) {
+                throw new Error("Dados inválidos recebidos da planilha.");
+            }
+            
             processarBI(data);
         } catch (e) {
-            alert("Erro ao conectar com a planilha. Verifique a URL do Script.");
+            console.error("Erro:", e);
+            alert("Não foi possível carregar os dados. Verifique:\n1. Se a planilha tem dados.\n2. Se o Script foi implantado como 'Qualquer Pessoa'.");
         } finally {
             const splash = document.getElementById('splash');
             splash.style.opacity = '0';
@@ -105,20 +122,22 @@
     };
 
     function processarBI(dados) {
-        // Filtros e Cálculos
-        const abertas = dados.filter(o => o.status.toLowerCase().includes('aberta'));
-        const urgentes = dados.filter(o => o.prioridade && o.prioridade.includes('1'));
-        const custoPeças = dados.reduce((acc, o) => acc + (parseFloat(o.produtos) || 0), 0);
+        // 1. Filtragem e Cálculos de KPI
+        const abertas = dados.filter(o => String(o.status || "").toLowerCase().includes('aberta'));
+        const urgentes = dados.filter(o => String(o.prioridade || "").includes('1'));
+        
+        // Soma da coluna "produtos" (conforme sua nova planilha linha 1)
+        const totalInvestido = dados.reduce((acc, o) => acc + (parseFloat(o.produtos) || 0), 0);
 
         document.getElementById('kpiTotal').innerText = dados.length;
         document.getElementById('kpiAbertas').innerText = abertas.length;
         document.getElementById('kpiAlta').innerText = urgentes.length;
-        document.getElementById('kpiCusto').innerText = custoPeças.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
+        document.getElementById('kpiCusto').innerText = totalInvestido.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
 
-        // Gráfico 1: Sistemas (Barra)
+        // 2. Gráfico de Sistemas (Pareto)
         const sistemasMap = {};
         dados.forEach(o => {
-            const s = o.sistema || "Geral";
+            const s = o.sistema || "Outros";
             sistemasMap[s] = (sistemasMap[s] || 0) + 1;
         });
         const sortedSistemas = Object.entries(sistemasMap).sort((a,b) => b[1] - a[1]).slice(0, 8);
@@ -128,10 +147,10 @@
             data: {
                 labels: sortedSistemas.map(s => s[0]),
                 datasets: [{
-                    label: 'Ocorrências',
+                    label: 'Quantidade',
                     data: sortedSistemas.map(s => s[1]),
                     backgroundColor: '#005697',
-                    borderRadius: 8
+                    borderRadius: 6
                 }]
             },
             options: {
@@ -144,7 +163,7 @@
             }
         });
 
-        // Gráfico 2: Mix Manutenção (Pizza)
+        // 3. Gráfico de Mix (Pizza/Doughnut)
         const tiposMap = {};
         dados.forEach(o => {
             const t = o.manutencao || "Outros";
@@ -157,13 +176,13 @@
                 labels: Object.keys(tiposMap),
                 datasets: [{
                     data: Object.values(tiposMap),
-                    backgroundColor: ['#005697', '#FDB813', '#ef4444', '#10b981', '#6366f1']
+                    backgroundColor: ['#005697', '#FDB813', '#ef4444', '#10b981', '#6366f1', '#94a3b8']
                 }]
             },
             options: {
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'right' },
+                    legend: { position: 'bottom' },
                     datalabels: { color: '#fff', font: {weight:'bold'} }
                 }
             }
@@ -172,4 +191,3 @@
 </script>
 </body>
 </html>
-       
