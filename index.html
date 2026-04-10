@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SV MASTER - BI Avançado</title>
+    <title>SV MASTER - BI & Checklist Completo</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        :root { 
-            --sv-blue: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD;
-            --sv-accent: #4CC9F0; --sv-danger: #EF4444; --sv-success: #22C55E;
-        }
+        :root { --sv-blue: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.8s; }
-        #splash img { width: 180px; animation: entrance 1.2s ease-out forwards; }
-        @keyframes entrance { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.5s; }
+        #splash img { width: 160px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
 
         #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
         .logo-home { width: 220px; margin-bottom: 40px; }
@@ -26,38 +23,47 @@
         .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; text-align: center; }
         .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; color: var(--sv-yellow); }
 
-        .navbar { background: var(--sv-blue-mid); padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
-        .navbar img { height: 35px; }
-        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: 800; cursor: pointer; color: var(--sv-blue); font-size: 11px; }
+        .header { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
+        .header img { height: 35px; }
+        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); font-size: 11px; text-transform: uppercase; }
 
-        .screen { display: none; padding: 15px; max-width: 1400px; margin: auto; padding-bottom: 80px; }
+        .screen { display: none; padding: 15px; max-width: 1600px; margin: auto; padding-bottom: 80px; }
         .active { display: block; }
 
-        .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
-        select, input { background: var(--sv-blue); color: white; border: 1.5px solid var(--sv-yellow); padding: 10px; border-radius: 8px; font-size: 14px; width: 100%; outline: none; }
-
-        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
-        @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
-        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; text-align: center; border-left: 5px solid var(--sv-yellow); }
-        .kpi-card .value { font-size: 1.2rem; font-weight: 900; margin: 5px 0; color: white; }
-
-        /* Card do Gráfico com Seletor */
-        .chart-card { background: var(--sv-blue-mid); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); position: relative; margin-bottom: 20px; }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
-        .chart-card h4 { margin: 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; }
+        /* BI Layout Achatado Original */
+        .filter-section { background: var(--sv-blue-mid); padding: 12px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .filter-section select, .filter-section input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; }
         
-        .drill-selectors { display: flex; gap: 4px; background: var(--sv-blue); padding: 3px; border-radius: 6px; }
-        .drill-btn { background: none; border: none; color: #888; padding: 5px 10px; font-size: 9px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
-        .drill-btn.active { background: var(--sv-yellow); color: var(--sv-blue); }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
+        .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
+        .kpi-card .value { font-size: 16px; font-weight: 800; margin: 5px 0; color: white; }
 
-        .canvas-wrapper { position: relative; height: 320px; width: 100%; }
+        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; margin-bottom: 15px; }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
+        .chart-header h4 { margin: 0; color: var(--sv-yellow); font-size: 11px; text-transform: uppercase; }
+        
+        /* Botões Drill-down */
+        .drill-selectors { display: flex; gap: 2px; background: #001d3d; padding: 2px; border-radius: 6px; }
+        .drill-btn { background: none; border: none; color: #888; padding: 5px 8px; font-size: 9px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
+        .drill-btn.active { background: var(--sv-yellow); color: #001d3d; }
 
-        /* Modal e Pop-up */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 10001; padding: 15px; overflow-y: auto; }
-        .modal-content { background: white; color: #333; border-radius: 16px; padding: 20px; max-width: 1000px; margin: auto; }
-        .table-res { overflow-x: auto; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 11px; }
-        th, td { border-bottom: 1px solid #eee; padding: 10px; text-align: left; }
+        .canvas-wrapper { position: relative; height: 280px; width: 100%; }
+
+        /* Modal */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; padding: 10px; overflow-y: auto; }
+        .modal-content { background: white; color: #333; border-radius: 10px; padding: 15px; width: 100%; max-width: 1000px; margin: auto; }
+        .modal-chart-area { height: 400px; width: 100%; }
+        .table-responsive { overflow-x: auto; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; min-width: 600px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+
+        /* Checklist Styles (Preservado) */
+        .category-block { background: white; border-radius: 10px; margin: 15px 0; border: 2px solid #e1e5eb; overflow: hidden; color: #333; }
+        .category-title { background: #f1f3f6; font-weight: 800; padding: 10px 15px; font-size: 12px; border-bottom: 2px solid #e1e5eb; color: var(--sv-blue-mid); }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #eee; }
+        .res-check { width: auto; min-width: 85px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; }
+        label { display: block; margin: 15px 0 5px; font-weight: 700; color: var(--sv-yellow); font-size: 0.85rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -73,36 +79,38 @@
 </div>
 
 <div id="screen-checklist" class="screen">
-    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     <div style="max-width: 500px; margin: auto; padding-top: 20px;">
-        <label>OPERADOR</label><input type="text" id="operador" placeholder="Nome">
-        <label>TIPO MÁQUINA</label><select id="tipoMaquina" onchange="filtraIDs()"><option value="">Selecione...</option></select>
-        <label>ID MÁQUINA</label><select id="idMaquina"><option value="">Aguardando...</option></select>
-        <button onclick="irParaChecklist()" class="btn-voltar" style="width:100%; padding:18px; font-size:14px; margin-top:10px;">INICIAR INSPEÇÃO</button>
+        <label>OPERADOR</label>
+        <input type="text" id="operador" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;">
+        <label>TIPO MÁQUINA</label>
+        <select id="tipoMaquina" onchange="filtraIDs()" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;"><option value="">Selecione...</option></select>
+        <label>ID MÁQUINA</label>
+        <select id="idMaquina" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;"><option value="">Aguardando...</option></select>
+        <button class="btn-voltar" style="width:100%; padding:18px; margin-top:10px;" onclick="irParaChecklist()">INICIAR INSPEÇÃO</button>
     </div>
 </div>
 
 <div id="screen-exec" class="screen">
-    <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center;"></div>
+    <div id="banner" style="text-align:center; padding:15px; font-weight:bold; color:var(--sv-yellow); background: var(--sv-blue-mid); border-radius: 10px; margin-bottom: 10px;"></div>
     <div id="checklistArea"></div>
-    <label>OBSERVAÇÕES</label><textarea id="obs" rows="3" style="width:100%; background:var(--sv-blue); color:white; border:1px solid var(--sv-yellow); border-radius:10px; padding:15px;"></textarea>
-    <button id="btnSalvar" onclick="salvarChecklist()" style="background:var(--sv-yellow); width:100%; padding:20px; border:none; border-radius:10px; font-weight:800; margin-top:15px;">ENVIAR</button>
+    <button class="btn-voltar" style="width:100%; padding:20px; font-size: 16px; margin-top:15px;" onclick="salvarChecklist()">FINALIZAR E ENVIAR</button>
 </div>
 
 <div id="screen-bi" class="screen">
-    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     
     <div class="filter-section" style="margin-top:20px;">
-        <input type="month" id="fDataBI" onchange="updateDashboardBI()">
-        <select id="fManutBI" onchange="updateDashboardBI()"><option value="">Todas Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
-        <select id="fStatusBI" onchange="updateDashboardBI()"><option value="">Todos Status</option><option value="Finalizada">Finalizada</option><option value="Aberta">Aberta</option></select>
-        <button onclick="exportPDF()" style="background:var(--sv-success); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">PDF</button>
+        <input type="month" id="fData" onchange="updateDashboard()">
+        <select id="fManut" onchange="updateDashboard()"><option value="">Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
+        <select id="fStatus" onchange="updateDashboard()"><option value="">Status</option><option value="Finalizada">Finalizadas</option><option value="Aberta">Abertas</option></select>
+        <button class="btn-voltar" style="background:#27ae60; color:white;" onclick="exportPDF()">PDF</button>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:var(--sv-danger)">0</div></div>
-        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:var(--sv-success)">0</div></div>
+        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:red">0</div></div>
+        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
         <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
         <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
         <div class="kpi-card"><h3>MÉDIA/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
@@ -111,42 +119,72 @@
 
     <div class="charts-container" id="pdfArea">
         <div class="chart-card">
-            <div class="chart-header"><h4>Pareto: OS / Sistema</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrillMode(this,'oc')">OC</button><button class="drill-btn" onclick="setDrillMode(this,'op')">Operação</button></div></div>
+            <div class="chart-header">
+                <h4>Pareto: Volume OS / Sistema</h4>
+                <div class="drill-selectors">
+                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'count')">OC</button>
+                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'count')">Operação</button>
+                </div>
+            </div>
             <div class="canvas-wrapper"><canvas id="cPareto"></canvas></div>
         </div>
+
         <div class="chart-card">
-            <div class="chart-header"><h4>HH Acumulado por Sistema</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrillMode(this,'oc')">OC</button><button class="drill-btn" onclick="setDrillMode(this,'op')">Operação</button></div></div>
+            <div class="chart-header">
+                <h4>HH Acumulado por Sistema</h4>
+                <div class="drill-selectors">
+                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'sum', 'hh')">OC</button>
+                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'sum', 'hh')">Operação</button>
+                </div>
+            </div>
             <div class="canvas-wrapper"><canvas id="cHH"></canvas></div>
         </div>
-        <div class="chart-card">
-            <div class="chart-header"><h4>Custo por Centro de Resultado</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrillMode(this,'oc')">OC</button></div></div>
-            <div class="canvas-wrapper"><canvas id="cCustoCentro"></canvas></div>
-        </div>
+
         <div class="chart-card">
             <div class="chart-header"><h4>Tendência Mensal</h4></div>
             <div class="canvas-wrapper"><canvas id="cTrend"></canvas></div>
         </div>
+
         <div class="chart-card">
-            <div class="chart-header"><h4>Top 10 Custo Equipamento</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrillMode(this,'oc')">OC</button><button class="drill-btn" onclick="setDrillMode(this,'op')">Operação</button></div></div>
+            <div class="chart-header">
+                <h4>Top 10 Custo Equipamento</h4>
+                <div class="drill-selectors">
+                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'sum', 'produtos')">OC</button>
+                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'sum', 'produtos')">Operação</button>
+                </div>
+            </div>
             <div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div>
         </div>
+
         <div class="chart-card">
-            <div class="chart-header"><h4>Top 10 Freq. Equipamento</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrillMode(this,'oc')">OC</button><button class="drill-btn" onclick="setDrillMode(this,'op')">Operação</button></div></div>
+            <div class="chart-header">
+                <h4>Top 10 Freq. Equipamento</h4>
+                <div class="drill-selectors">
+                    <button class="drill-btn active" onclick="setDrillMode(this, 'oc', 'count')">OC</button>
+                    <button class="drill-btn" onclick="setDrillMode(this, 'op', 'count')">Operação</button>
+                </div>
+            </div>
             <div class="canvas-wrapper"><canvas id="cEquipFreq"></canvas></div>
         </div>
+
+        <div class="chart-card">
+            <div class="chart-header"><h4>HH por Sistema (Horiz)</h4></div>
+            <div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div>
+        </div>
+
         <div class="chart-card">
             <div class="chart-header"><h4>Distribuição % Sistemas</h4></div>
-            <div class="canvas-wrapper"><canvas id="cPizzaBI"></canvas></div>
+            <div class="canvas-wrapper"><canvas id="cPizza"></canvas></div>
         </div>
     </div>
 </div>
 
 <div id="modal">
     <div class="modal-content">
-        <button onclick="closeModal()" style="float:right; background:var(--sv-danger); color:white; border:none; padding:10px 15px; border-radius:8px;">X</button>
-        <h3 id="modalTitle" style="color:var(--sv-blue-mid);">DETALHES</h3>
-        <div id="modalChart" style="display:none; height:400px; width:100%;"><canvas id="cPopUp"></canvas></div>
-        <div id="modalTable" class="table-res">
+        <button onclick="closeModal()" style="float:right; background:red; color:white; border:none; padding:8px; border-radius:5px;">X</button>
+        <h3 id="modalTitle">DETALHES</h3>
+        <div id="modalChart" style="display:none;" class="modal-chart-area"><canvas id="cPopUp"></canvas></div>
+        <div id="modalTable" class="table-responsive">
             <table><thead><tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Valor</th><th>HH</th><th>Operação</th></tr></thead><tbody id="modalBody"></tbody></table>
         </div>
     </div>
@@ -154,18 +192,20 @@
 
 <script>
     const URL_CHECKLIST = "https://script.google.com/macros/s/AKfycbxXLqXBs3Of8h2TE1I2B61NfcJVONzHe45wGpzRaXlHdSAnBsdrZ67aALUjiN3DVj1z/exec";
-    const URL_BI = "https://script.google.com/macros/s/AKfycbyzjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
+    const URL_BI = "https://script.google.com/macros/s/AKfycbyvjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
     const KEY_OP = "Descrição (Centros de Resultado)";
 
-    let rawBI = [], dHistorico = [], dMaquinas = [], charts = {}, drillMode = 'oc';
+    let rawBI = [], dMaquinas = [], dItens = [], charts = {}, drillMode = 'oc', drillMetric = 'count', drillSumKey = null;
     Chart.register(ChartDataLabels);
 
     window.onload = async () => {
-        const resC = await fetch(URL_CHECKLIST); const dataC = await resC.json();
-        dMaquinas = dataC.maquinas; dHistorico = dataC.historico;
-        const selT = document.getElementById('tipoMaquina');
-        [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
-        document.getElementById('splash').style.display = 'none';
+        try {
+            const resC = await fetch(URL_CHECKLIST); const dataC = await resC.json();
+            dMaquinas = dataC.maquinas; dItens = dataC.itens;
+            const selT = document.getElementById('tipoMaquina');
+            [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
+            document.getElementById('splash').style.display = 'none';
+        } catch (e) { console.error(e); }
     };
 
     function showScreen(id) {
@@ -174,78 +214,89 @@
         if(id === 'bi') loadBI();
     }
 
-    function setDrillMode(btn, mode) {
+    function setDrillMode(btn, mode, metric = 'count', sumKey = null) {
         btn.parentElement.querySelectorAll('.drill-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active'); drillMode = mode;
+        btn.classList.add('active'); 
+        drillMode = mode; drillMetric = metric; drillSumKey = sumKey;
     }
 
     async function loadBI() {
         if(rawBI.length === 0) { const res = await fetch(URL_BI); rawBI = await res.json(); }
-        updateDashboardBI();
+        updateDashboard();
     }
 
-    function updateDashboardBI() {
-        const fD = document.getElementById('fDataBI').value, fM = document.getElementById('fManutBI').value, fS = document.getElementById('fStatusBI').value;
+    function updateDashboard() {
+        const fD = document.getElementById('fData').value, fM = document.getElementById('fManut').value, fS = document.getElementById('fStatus').value;
         const data = rawBI.filter(d => (fD ? String(d.data_e_hora_de_inicio).includes(fD) : true) && (fM ? d.manutencao === fM : true) && (fS ? d.status === fS : true));
         
-        const total = data.length, custo = data.reduce((a, b) => a + (b.produtos || 0), 0), hh = data.reduce((a, b) => a + (b.hh || 0), 0);
-        document.getElementById('kTotal').innerText = total;
-        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        document.getElementById('kHH').innerText = Math.round(hh) + "h";
+        const custo = data.reduce((a, b) => a + (b.produtos || 0), 0);
+        const hh = data.reduce((a, b) => a + (b.hh || 0), 0);
         
+        document.getElementById('kTotal').innerText = data.length;
+        document.getElementById('kAbertas').innerText = data.filter(x => x.status === 'Aberta').length;
+        document.getElementById('kFechadas').innerText = data.filter(x => x.status === 'Finalizada').length;
+        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+        document.getElementById('kHH').innerText = Math.round(hh) + "h";
+        document.getElementById('kAvg').innerText = (custo/data.length || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
+        document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
+
         renderChartsBI(data);
     }
 
     function renderChartsBI(data) {
-        const ids = ['cPareto','cHH','cTrend','cCustoEquip','cEquipFreq','cPizzaBI','cCustoCentro'];
+        const ids = ['cPareto','cHH','cTrend','cCustoEquip','cEquipFreq','cHHHoriz','cPizza'];
         ids.forEach(id => { if(charts[id]) charts[id].destroy(); });
 
-        const cfg = (m=false) => ({
+        const cfg = (isM=false) => ({
             maintainAspectRatio: false,
-            plugins: { datalabels: { color: '#fff', font:{weight:'bold', size:10}, formatter: v => m ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) }, legend:{display:false} },
+            plugins: { datalabels: { color: '#fff', font:{weight:'bold', size:9}, anchor: 'end', align: 'top', formatter: v => isM ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) }, legend:{display:false} },
             onClick: (e, activeEls) => { if(activeEls.length > 0) handleDrill(data, e.chart.data.labels[activeEls[0].index]); },
-            scales: { y: { ticks: { color: '#aaa', font: {size: 9} } }, x: { ticks: { color: '#fff', font: {size: 9} } } }
+            scales: { y: { ticks: { color: '#aaa', font:{size:9}} }, x: { ticks: { color: '#fff', font:{size:9}} } }
         });
 
         charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
         charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
-        charts.cCustoCentro = new Chart(document.getElementById('cCustoCentro'), { type:'bar', data:{ labels:sort(data,KEY_OP,"sum","produtos",10).l, datasets:[{data:sort(data,KEY_OP,"sum","produtos",10).v, backgroundColor:'#22C55E'}] }, options:{...cfg(true), indexAxis:'y'} });
-        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
-        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
+        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)', tension:0.3}] }, options:cfg() });
+        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#EF4444'}] }, options:{...cfg(true), indexAxis:'y'} });
         charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",null,10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",null,10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
         
         const pz = processPizza(data, "sistema");
-        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:pz.l, datasets:[{data:pz.v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{color:'#fff'}}, datalabels:{color:'#fff'} } } });
+        charts.cPizza = new Chart(document.getElementById('cPizza'), { type:'pie', data:{ labels:pz.l, datasets:[{data:pz.v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{color:'#fff', font:{size:8}}}, datalabels:{color:'#fff', font:{weight:'bold'}} } } });
     }
 
     function handleDrill(data, label) {
-        const sub = data.filter(d => d.sistema === label || d.cod_sec_veiculo === label || d[KEY_OP] === label);
+        const sub = data.filter(d => d.sistema === label || d.cod_sec_veiculo === label);
         document.getElementById('modalTitle').innerText = label;
 
         if (drillMode === 'oc') {
             document.getElementById('modalChart').style.display = 'none';
             document.getElementById('modalTable').style.display = 'block';
-            document.getElementById('modalBody').innerHTML = sub.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.data_e_hora_de_inicio}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td>${d[KEY_OP] || 'N/A'}</td></tr>`).join('');
+            document.getElementById('modalBody').innerHTML = sub.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td>${d[KEY_OP] || 'N/A'}</td></tr>`).join('');
         } else {
             document.getElementById('modalTable').style.display = 'none';
             document.getElementById('modalChart').style.display = 'block';
             if(charts.cPopUp) charts.cPopUp.destroy();
-            const popD = sort(sub, KEY_OP, "count");
-            charts.cPopUp = new Chart(document.getElementById('cPopUp'), { type: 'pie', data: { labels: popD.l, datasets: [{ data: popD.v, backgroundColor: ['#FFD60A','#4CC9F0','#22C55E','#F72585','#7209B7'] }] }, options: { maintainAspectRatio: false, plugins: { datalabels: { color: '#fff', font:{weight:'bold'} }, legend: { position: 'bottom' } } } });
+            
+            const popD = sort(sub, KEY_OP, drillMetric, drillSumKey);
+            const isMoney = (drillSumKey === 'produtos');
+
+            charts.cPopUp = new Chart(document.getElementById('cPopUp'), {
+                type: 'bar',
+                data: { labels: popD.l, datasets: [{ data: popD.v, backgroundColor: '#FFD60A' }] },
+                options: { 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { display: false },
+                        datalabels: { color: '#333', font:{weight:'bold'}, formatter: v => isMoney ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) } 
+                    } 
+                }
+            });
         }
         document.getElementById('modal').style.display = 'block';
     }
 
-    // Utilitários de lógica
-    function sort(arr, k, type, sK, l=99) {
-        const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {});
-        const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l);
-        return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) };
-    }
-    function trend(arr) {
-        const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {});
-        const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) };
-    }
+    // Utilitários
     function processPizza(arr, key) {
         const m = arr.reduce((acc, d) => { const x = d[key] || "N/A"; acc[x] = (acc[x] || 0) + 1; return acc; }, {});
         const total = Object.values(m).reduce((a, b) => a + b, 0);
@@ -254,22 +305,23 @@
         if (others > 0) { finalL.push("Outros"); finalV.push(others); }
         return { l: finalL, v: finalV };
     }
+
+    function sort(arr, k, type, sK, l=99) {
+        const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {});
+        const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l);
+        return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) };
+    }
+    
+    function trend(arr) {
+        const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {});
+        const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) };
+    }
+
+    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = ''; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
+    function irParaChecklist() { document.getElementById('screen-checklist').style.display = 'none'; document.getElementById('screen-exec').style.display = 'block'; }
+    async function salvarChecklist() { location.reload(); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
     function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:2, filename:'BI_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
-    
-    // Checklist Functions (Preservadas)
-    function filtraIDs() {
-        const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina');
-        s.innerHTML = ''; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`);
-    }
-    function irParaChecklist() {
-        const id = document.getElementById('idMaquina').value; 
-        document.getElementById('banner').innerText = `ID: ${id}`;
-        document.getElementById('screen-checklist').style.display = 'none';
-        document.getElementById('screen-exec').style.display = 'block';
-        // (Aqui entraria a lógica de carregar os itens que já tínhamos)
-    }
-    async function salvarChecklist() { alert("Enviado!"); location.reload(); }
 </script>
 </body>
 </html>
