@@ -3,34 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BI PCM SV - Versão Completa</title>
+    <title>BI PCM SV - Mobile & Desktop</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
         :root { --sv-blue-dark: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD; }
-        
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--sv-blue-dark); color: var(--sv-text); margin: 0; padding: 0; }
 
-        /* Splash & Nav */
         #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue-dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
         #splash img { width: 220px; margin-bottom: 20px; }
-        .navbar { background: var(--sv-blue-mid); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); sticky: top; z-index: 999; }
+        .navbar { background: var(--sv-blue-mid); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
         .navbar img { height: 45px; }
 
         .main { padding: 15px; max-width: 1600px; margin: auto; }
-
-        /* Filtros Profissionais */
         .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; border: 1px solid rgba(255,255,255,0.1); }
         select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; width: 100%; }
 
-        /* KPI Balões (Grids Adaptáveis) */
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 25px; }
         .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .kpi-card h3 { margin: 0; font-size: 10px; color: var(--sv-yellow); text-transform: uppercase; letter-spacing: 1px; }
+        .kpi-card h3 { margin: 0; font-size: 10px; color: var(--sv-yellow); text-transform: uppercase; }
         .kpi-card .value { font-size: 20px; font-weight: 800; margin: 8px 0; color: white; }
 
-        /* Gráficos */
         .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
         @media (max-width: 600px) { .charts-container { grid-template-columns: 1fr; } }
         .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; }
@@ -38,7 +32,6 @@
         .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .canvas-wrapper { position: relative; height: 300px; width: 100%; }
 
-        /* Modal Dril-down */
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,29,61,0.95); z-index: 10001; padding: 15px; overflow-y: auto; }
         .modal-content { background: white; color: #333; border-radius: 12px; padding: 20px; max-width: 1200px; margin: auto; }
         .table-responsive { overflow-x: auto; margin-top: 15px; }
@@ -49,76 +42,45 @@
 </head>
 <body>
 
-<div id="splash">
-    <img src="Logo.png" alt="SV Logística">
-    <h2 style="color:white; letter-spacing: 3px;">PCM INTELLIGENCE</h2>
-</div>
+<div id="splash"><img src="Logo.png" alt="SV Logística"><h2 style="color:white; letter-spacing: 3px;">PCM INTELLIGENCE</h2></div>
 
 <div id="modal">
     <div class="modal-content">
         <button onclick="closeModal()" style="float:right; padding: 5px 15px; background:var(--sv-blue-mid); color:white; border:none; border-radius:5px; cursor:pointer;">FECHAR</button>
-        <h2 id="modalTitle">Detalhes da Seleção</h2>
+        <h2 id="modalTitle" style="font-size: 18px; color: var(--sv-blue-mid);">Detalhes</h2>
         <div class="table-responsive">
             <table>
-                <thead>
-                    <tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Manutenção</th><th>Valor Peças</th><th>HH</th><th>Status</th></tr>
-                </thead>
+                <thead><tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Manutenção</th><th>Valor Peças</th><th>HH</th><th>Status</th></tr></thead>
                 <tbody id="modalBody"></tbody>
             </table>
         </div>
     </div>
 </div>
 
-<div class="navbar">
-    <img src="Logo.png" alt="SV Logística">
-    <h2 style="margin:0; font-size: 14px; color: var(--sv-yellow);">DASHBOARD OPERACIONAL</h2>
-</div>
+<div class="navbar"><img src="Logo.png" alt="SV Logística"><h2 style="margin:0; font-size: 14px; color: var(--sv-yellow);">PCM SV DASHBOARD</h2></div>
 
 <div class="main">
     <div class="filter-section">
         <input type="month" id="fData" onchange="updateDashboard()">
-        <select id="fManut" onchange="updateDashboard()">
-            <option value="">Manutenção: Todas</option>
-            <option value="Corretiva">Corretiva</option>
-            <option value="Preventiva">Preventiva</option>
-        </select>
-        <select id="fStatus" onchange="updateDashboard()">
-            <option value="">Status: Todos</option>
-            <option value="Finalizada">Finalizada</option>
-            <option value="Aberta">Aberta</option>
-        </select>
+        <select id="fManut" onchange="updateDashboard()"><option value="">Manutenção: Todas</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
+        <select id="fStatus" onchange="updateDashboard()"><option value="">Status: Todos</option><option value="Finalizada">Finalizada</option><option value="Aberta">Aberta</option></select>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>Total OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>OS Abertas</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
-        <div class="kpi-card"><h3>OS Fechadas</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
+        <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
+        <div class="kpi-card"><h3>Fechadas</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
         <div class="kpi-card"><h3>Custo Peças</h3><div class="value" id="kCusto">R$ 0</div></div>
         <div class="kpi-card"><h3>Total HH</h3><div class="value" id="kHH">0h</div></div>
         <div class="kpi-card"><h3>Média/OS</h3><div class="value" id="kAvg" style="color: #4CC9F0;">R$ 0</div></div>
     </div>
 
     <div class="charts-container">
-        <div class="chart-card">
-            <h4>Pareto: Volume de OS por Sistema</h4>
-            <div class="canvas-wrapper"><canvas id="cPareto"></canvas></div>
-        </div>
-        <div class="chart-card">
-            <h4>Acumulado HH por Sistema</h4>
-            <div class="canvas-wrapper"><canvas id="cHH"></canvas></div>
-        </div>
-        <div class="chart-card">
-            <h4>Top 10 Equipamentos Críticos</h4>
-            <div class="canvas-wrapper"><canvas id="cEquip"></canvas></div>
-        </div>
-        <div class="chart-card">
-            <h4>HH por Centro de Custo</h4>
-            <div class="canvas-wrapper"><canvas id="cHHCC"></canvas></div>
-        </div>
-        <div class="chart-card">
-            <h4>Prioridade de Atendimento</h4>
-            <div class="canvas-wrapper"><canvas id="cPrio"></canvas></div>
-        </div>
+        <div class="chart-card"><h4>Pareto: Volume OS por Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
+        <div class="chart-card"><h4>HH Acumulado por Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
+        <div class="chart-card"><h4>Top 10 Equipamentos Críticos</h4><div class="canvas-wrapper"><canvas id="cEquip"></canvas></div></div>
+        <div class="chart-card"><h4>HH por Sistema (Ranking)</h4><div class="canvas-wrapper"><canvas id="cHHCC"></canvas></div></div>
+        <div class="chart-card"><h4>Prioridade das OCs</h4><div class="canvas-wrapper"><canvas id="cPrio"></canvas></div></div>
     </div>
 </div>
 
@@ -129,7 +91,6 @@
     let charts = {};
 
     Chart.register(ChartDataLabels);
-    const labelCfg = { color: '#fff', font: { weight: 'bold', size: 11 }, anchor: 'end', align: 'top', offset: -2 };
 
     async function init() {
         try {
@@ -152,14 +113,15 @@
             return dMatch && mMatch && sMatch;
         });
 
-        // Atualizar Balões
         const total = currentFiltered.length;
         const custo = currentFiltered.reduce((acc, d) => acc + (d.produtos || 0), 0);
+        const totalHH = currentFiltered.reduce((acc, d) => acc + (d.hh || 0), 0);
+
         document.getElementById('kTotal').innerText = total;
         document.getElementById('kAbertas').innerText = currentFiltered.filter(d => d.status === 'Aberta').length;
         document.getElementById('kFechadas').innerText = currentFiltered.filter(d => d.status === 'Finalizada').length;
         document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        document.getElementById('kHH').innerText = currentFiltered.reduce((acc, d) => acc + (d.hh || 0), 0).toFixed(1) + "h";
+        document.getElementById('kHH').innerText = Math.round(totalHH) + "h";
         document.getElementById('kAvg').innerText = (custo / total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
 
         renderCharts(currentFiltered);
@@ -168,9 +130,19 @@
     function renderCharts(data) {
         Object.values(charts).forEach(c => c.destroy());
 
-        const baseOpt = (clickFn) => ({
+        const baseOpt = (clickFn, isHH = false) => ({
             maintainAspectRatio: false,
-            plugins: { datalabels: labelCfg, legend: { display: false } },
+            plugins: { 
+                datalabels: { 
+                    color: '#fff', 
+                    font: { weight: 'bold', size: 11 }, 
+                    anchor: 'end', 
+                    align: 'top', 
+                    offset: -2,
+                    formatter: (val) => isHH ? Math.round(val) : val
+                }, 
+                legend: { display: false } 
+            },
             onClick: (e, activeEls) => {
                 if (activeEls.length > 0) {
                     const idx = activeEls[0].index;
@@ -197,7 +169,7 @@
         charts.cHH = new Chart(document.getElementById('cHH'), {
             type: 'bar',
             data: { labels: hData.labels, datasets: [{ data: hData.values, backgroundColor: '#00A8E8' }] },
-            options: baseOpt(lbl => openDetails(lbl, "sistema"))
+            options: baseOpt(lbl => openDetails(lbl, "sistema"), true)
         });
 
         // 3. Top 10 Equipamentos
@@ -208,12 +180,12 @@
             options: { ...baseOpt(lbl => openDetails(lbl, "cod_sec_veiculo")), indexAxis: 'y' }
         });
 
-        // 4. HH Centro Custo
-        const ccData = sumAndSort(data, "centro_resultado", "hh");
+        // 4. HH por Sistema (Horizontal)
+        const sHHData = sumAndSort(data, "sistema", "hh");
         charts.cHHCC = new Chart(document.getElementById('cHHCC'), {
             type: 'bar',
-            data: { labels: ccData.labels, datasets: [{ data: ccData.values, backgroundColor: '#7209B7' }] },
-            options: { ...baseOpt(lbl => openDetails(lbl, "centro_resultado")), indexAxis: 'y' }
+            data: { labels: sHHData.labels, datasets: [{ data: sHHData.values, backgroundColor: '#7209B7' }] },
+            options: { ...baseOpt(lbl => openDetails(lbl, "sistema"), true), indexAxis: 'y' }
         });
 
         // 5. Prioridade
