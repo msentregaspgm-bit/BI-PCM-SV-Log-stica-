@@ -24,7 +24,7 @@
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
         .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .menu-card:active { transform: scale(0.95); background: var(--sv-yellow); color: var(--sv-blue); }
-        .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; }
+        .menu-card h2 { margin: 10px 0; font-size: 1.2rem; text-transform: uppercase; }
 
         /* Navbar */
         .navbar { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
@@ -36,30 +36,36 @@
         .active { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Filtros BI - REINTEGRADOS */
+        /* Filtros */
         .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; border: 1px solid rgba(255,255,255,0.1); }
         select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; width: 100%; }
 
-        /* KPIs BI */
+        /* KPIs */
         .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
         @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
-        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
         .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
         .kpi-card .value { font-size: 18px; font-weight: 800; margin: 5px 0; color: white; }
 
         /* Gráficos */
         .charts-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 992px) { .charts-container { grid-template-columns: 1fr 1fr; } }
-        .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .canvas-wrapper { position: relative; height: 300px; width: 100%; }
 
         /* Modal */
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,29,61,0.95); z-index: 2000; padding: 15px; overflow-y: auto; }
         .modal-content { background: white; color: #333; border-radius: 12px; padding: 20px; max-width: 1200px; margin: auto; }
-        .table-res { overflow-x: auto; font-size: 11px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 11px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+
+        /* Checklist Styles */
+        .category-block { background: var(--sv-blue-mid); border-radius: 10px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+        .category-title { background: rgba(255,214,10,0.1); color: var(--sv-yellow); font-weight: 800; padding: 10px 15px; font-size: 11px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .res-check { width: auto; min-width: 80px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; color: var(--sv-yellow); font-size: 11px; }
     </style>
 </head>
 <body>
@@ -86,7 +92,7 @@
 </div>
 
 <div id="screen-exec" class="screen">
-    <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center; border: 1px solid var(--sv-yellow);"></div>
+    <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center;"></div>
     <div id="checklistArea"></div>
     <label>Observações</label><textarea id="obs" rows="3" style="width:100%; background:var(--sv-blue); color:white; border:1px solid var(--sv-yellow); border-radius:8px;"></textarea>
     <button id="btnSalvar" onclick="salvarChecklist()" style="background:var(--sv-yellow); width:100%; padding:18px; border:none; border-radius:10px; font-weight:800; cursor:pointer; margin-top:15px;">FINALIZAR E ENVIAR</button>
@@ -96,18 +102,18 @@
     <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     
     <div class="filter-section" style="margin-top:20px;">
-        <input type="month" id="fDataBI" onchange="updateBI()">
-        <select id="fManutBI" onchange="updateBI()">
+        <input type="month" id="fDataBI" onchange="updateDashboardBI()">
+        <select id="fManutBI" onchange="updateDashboardBI()">
             <option value="">Manutenção: Todas</option>
             <option value="Corretiva">Corretiva</option>
             <option value="Preventiva">Preventiva</option>
         </select>
-        <select id="fStatusBI" onchange="updateBI()">
+        <select id="fStatusBI" onchange="updateDashboardBI()">
             <option value="">Status: Todos</option>
             <option value="Finalizada">Finalizada</option>
             <option value="Aberta">Aberta</option>
         </select>
-        <button onclick="exportPDF()" style="background:#27ae60; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">GERAR PDF</button>
+        <button onclick="exportPDF()" style="background:#27ae60; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">PDF</button>
     </div>
 
     <div class="kpi-grid">
@@ -172,7 +178,8 @@
 
     // --- CHECKLIST ---
     function filtraIDs() {
-        const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina');
+        const t = document.getElementById('tipoMaquina').value;
+        const s = document.getElementById('idMaquina');
         s.innerHTML = '<option value="">Selecione...</option>';
         dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => { s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`; });
     }
@@ -180,7 +187,8 @@
         const id = document.getElementById('idMaquina').value, t = document.getElementById('tipoMaquina').value;
         if(!id) return alert("Selecione!");
         const itensF = dItens.filter(i => i.tipo_maquina.toString().toLowerCase() === t.toLowerCase());
-        document.getElementById('banner').innerText = `ID: ${id}`;
+        const maq = dMaquinas.find(m => m.id_maquina === id);
+        document.getElementById('banner').innerText = `ID: ${id} | PLACA: ${maq.placa}`;
         const area = document.getElementById('checklistArea'); area.innerHTML = "";
         const cats = [...new Set(itensF.map(i => i.categoria))];
         cats.forEach(c => {
@@ -201,22 +209,24 @@
 
     // --- BI GESTÃO COMPLETO ---
     async function loadBI() {
-        const res = await fetch(URL_BI); rawBI = await res.json();
-        updateBI();
+        const res = await fetch(URL_BI);
+        rawBI = await res.json();
+        updateDashboardBI();
     }
 
-    function updateBI() {
-        const fData = document.getElementById('fDataBI').value;
+    function updateDashboardBI() {
+        const fDate = document.getElementById('fDataBI').value;
         const fManut = document.getElementById('fManutBI').value;
         const fStatus = document.getElementById('fStatusBI').value;
 
         const data = rawBI.filter(d => {
-            let dM = fData ? String(d.data_e_hora_de_inicio).includes(fData) : true;
+            let dM = fDate ? String(d.data_e_hora_de_inicio).includes(fDate) : true;
             let mM = fManut ? d.manutencao === fManut : true;
             let sM = fStatus ? d.status === fStatus : true;
             return dM && mM && sM;
         });
 
+        // Atualiza Balões
         const total = data.length, custo = data.reduce((acc, d) => acc + (d.produtos || 0), 0), hh = data.reduce((acc, d) => acc + (d.hh || 0), 0);
         document.getElementById('kTotal').innerText = total;
         document.getElementById('kAbertas').innerText = data.filter(d => d.status === 'Aberta').length;
@@ -225,10 +235,11 @@
         document.getElementById('kHH').innerText = Math.round(hh) + "h";
         document.getElementById('kAvg').innerText = (custo/total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
         document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        renderBICharts(data);
+
+        renderChartsBI(data);
     }
 
-    function renderBICharts(data) {
+    function renderChartsBI(data) {
         Object.values(charts).forEach(c => { if(c.id.indexOf('Check') === -1) c.destroy(); });
         const cfg = (m=false) => ({
             maintainAspectRatio: false,
@@ -236,10 +247,11 @@
             onClick: (e, activeEls) => { if(activeEls.length > 0) openDetails(e.chart.data.labels[activeEls[0].index]); },
             scales: { y:{ ticks:{color:'#aaa', font:{size:9}}, grid:{color:'rgba(255,255,255,0.05)'} }, x:{ ticks:{color:'#fff', font:{size:9}} } }
         });
+
         charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
         charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
-        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
         charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
+        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
         charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
         charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
         charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:'#fff',font:{size:8}}}} } });
