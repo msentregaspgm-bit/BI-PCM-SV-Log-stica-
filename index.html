@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SV MASTER - Sistema Integrado Total</title>
+    <title>SV MASTER - Sistema Total</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -18,7 +18,7 @@
         #splash img { width: 180px; animation: entrance 1.2s ease-out forwards; }
         @keyframes entrance { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Menu Inicial */
+        /* Menu Home */
         #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
         .logo-home { width: 220px; margin-bottom: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
@@ -36,10 +36,14 @@
         .active { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* Filtros BI - REINTEGRADOS */
+        .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; width: 100%; }
+
         /* KPIs BI */
-        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
         @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
-        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
+        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
         .kpi-card .value { font-size: 18px; font-weight: 800; margin: 5px 0; color: white; }
 
@@ -49,17 +53,6 @@
         .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
         .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .canvas-wrapper { position: relative; height: 300px; width: 100%; }
-
-        /* Checklist */
-        .category-block { background: var(--sv-blue-mid); border-radius: 10px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-        .category-title { background: rgba(255,214,10,0.1); color: var(--sv-yellow); font-weight: 800; padding: 10px 15px; font-size: 11px; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .res-check { width: auto; min-width: 80px; padding: 5px; background: var(--sv-blue); color: white; border: 1px solid var(--sv-yellow); }
-
-        /* Formulários */
-        label { display: block; margin: 15px 0 5px; font-weight: bold; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--sv-yellow); border-radius: 8px; background: var(--sv-blue); color: white; margin-bottom: 10px; }
-        .btn-main { background: var(--sv-yellow); color: #001D3D; width: 100%; padding: 18px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
 
         /* Modal */
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,29,61,0.95); z-index: 2000; padding: 15px; overflow-y: auto; }
@@ -86,23 +79,38 @@
     <div style="max-width: 500px; margin: auto;">
         <label>Operador</label><input type="text" id="operador" placeholder="Seu nome">
         <label>Tipo da Máquina</label><select id="tipoMaquina" onchange="filtraIDs()"><option value="">Selecione...</option></select>
-        <label>ID da Máquina</label><select id="idMaquina"><option value="">Aguardando tipo...</option></select>
-        <button class="btn-main" onclick="irParaChecklist()">INICIAR INSPEÇÃO</button>
-        <button class="btn-main" style="background:var(--sv-blue-mid); color:white; margin-top:20px;" onclick="showScreen('dash-check')">INDICADORES CHECKLIST</button>
+        <label>ID da Máquina</label><select id="idMaquina"><option value="">Aguardando...</option></select>
+        <button onclick="irParaChecklist()" style="background:var(--sv-yellow); width:100%; padding:18px; border:none; border-radius:10px; font-weight:800; cursor:pointer; margin-top:10px;">INICIAR INSPEÇÃO</button>
+        <button onclick="showScreen('dash-check')" style="background:var(--sv-blue-mid); color:white; width:100%; padding:15px; border:none; border-radius:10px; font-weight:bold; margin-top:20px; cursor:pointer;">INDICADORES CHECKLIST</button>
     </div>
 </div>
 
 <div id="screen-exec" class="screen">
     <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center; border: 1px solid var(--sv-yellow);"></div>
     <div id="checklistArea"></div>
-    <label>Observações</label><textarea id="obs" rows="3"></textarea>
-    <button id="btnSalvar" class="btn-main" onclick="salvarChecklist()">FINALIZAR E ENVIAR</button>
+    <label>Observações</label><textarea id="obs" rows="3" style="width:100%; background:var(--sv-blue); color:white; border:1px solid var(--sv-yellow); border-radius:8px;"></textarea>
+    <button id="btnSalvar" onclick="salvarChecklist()" style="background:var(--sv-yellow); width:100%; padding:18px; border:none; border-radius:10px; font-weight:800; cursor:pointer; margin-top:15px;">FINALIZAR E ENVIAR</button>
 </div>
 
 <div id="screen-bi" class="screen">
-    <div class="navbar"><img src="Logo.png"> <div style="display:flex; gap:5px;"><button class="btn-voltar" style="background:#27ae60; color:white;" onclick="exportPDF()">PDF</button><button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div></div>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     
-    <div class="kpi-grid" style="margin-top:20px;">
+    <div class="filter-section" style="margin-top:20px;">
+        <input type="month" id="fDataBI" onchange="updateBI()">
+        <select id="fManutBI" onchange="updateBI()">
+            <option value="">Manutenção: Todas</option>
+            <option value="Corretiva">Corretiva</option>
+            <option value="Preventiva">Preventiva</option>
+        </select>
+        <select id="fStatusBI" onchange="updateBI()">
+            <option value="">Status: Todos</option>
+            <option value="Finalizada">Finalizada</option>
+            <option value="Aberta">Aberta</option>
+        </select>
+        <button onclick="exportPDF()" style="background:#27ae60; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">GERAR PDF</button>
+    </div>
+
+    <div class="kpi-grid">
         <div class="kpi-card"><h3>Total OS</h3><div class="value" id="kTotal">0</div></div>
         <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
         <div class="kpi-card"><h3>Fechadas</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
@@ -191,27 +199,42 @@
         alert("Enviado!"); location.reload();
     }
 
-    // --- BI GESTÃO (TODOS OS 7 GRÁFICOS) ---
+    // --- BI GESTÃO COMPLETO ---
     async function loadBI() {
         const res = await fetch(URL_BI); rawBI = await res.json();
-        const total = rawBI.length, custo = rawBI.reduce((acc, d) => acc + (d.produtos || 0), 0), hh = rawBI.reduce((acc, d) => acc + (d.hh || 0), 0);
+        updateBI();
+    }
+
+    function updateBI() {
+        const fData = document.getElementById('fDataBI').value;
+        const fManut = document.getElementById('fManutBI').value;
+        const fStatus = document.getElementById('fStatusBI').value;
+
+        const data = rawBI.filter(d => {
+            let dM = fData ? String(d.data_e_hora_de_inicio).includes(fData) : true;
+            let mM = fManut ? d.manutencao === fManut : true;
+            let sM = fStatus ? d.status === fStatus : true;
+            return dM && mM && sM;
+        });
+
+        const total = data.length, custo = data.reduce((acc, d) => acc + (d.produtos || 0), 0), hh = data.reduce((acc, d) => acc + (d.hh || 0), 0);
         document.getElementById('kTotal').innerText = total;
-        document.getElementById('kAbertas').innerText = rawBI.filter(d => d.status === 'Aberta').length;
-        document.getElementById('kFechadas').innerText = rawBI.filter(d => d.status === 'Finalizada').length;
+        document.getElementById('kAbertas').innerText = data.filter(d => d.status === 'Aberta').length;
+        document.getElementById('kFechadas').innerText = data.filter(d => d.status === 'Finalizada').length;
         document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
         document.getElementById('kHH').innerText = Math.round(hh) + "h";
         document.getElementById('kAvg').innerText = (custo/total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
         document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        renderBICharts(rawBI);
+        renderBICharts(data);
     }
 
     function renderBICharts(data) {
         Object.values(charts).forEach(c => { if(c.id.indexOf('Check') === -1) c.destroy(); });
         const cfg = (m=false) => ({
             maintainAspectRatio: false,
-            plugins: { datalabels: { color: '#fff', font:{weight:'bold'}, formatter: v => m ? 'R$ '+Math.round(v) : Math.round(v) }, legend:{display:false} },
+            plugins: { datalabels: { color: '#fff', font:{weight:'bold', size:10}, formatter: v => m ? 'R$ '+Math.round(v) : Math.round(v) }, legend:{display:false} },
             onClick: (e, activeEls) => { if(activeEls.length > 0) openDetails(e.chart.data.labels[activeEls[0].index]); },
-            scales: { y:{ ticks:{color:'#aaa'}, grid:{color:'rgba(255,255,255,0.05)'} }, x:{ ticks:{color:'#fff'} } }
+            scales: { y:{ ticks:{color:'#aaa', font:{size:9}}, grid:{color:'rgba(255,255,255,0.05)'} }, x:{ ticks:{color:'#fff', font:{size:9}} } }
         });
         charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
         charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
@@ -219,10 +242,9 @@
         charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
         charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
         charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
-        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:'#fff',font:{size:10}}}} } });
+        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:'#fff',font:{size:8}}}} } });
     }
 
-    // --- INDICADORES CHECKLIST ---
     function renderDashCheck() {
         let ok = 0, nok = 0, ranking = {};
         dHistorico.forEach(f => { if(f.status === "OK") ok++; else { nok++; ranking[f.item] = (ranking[f.item] || 0) + 1; } });
