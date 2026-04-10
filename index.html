@@ -2,48 +2,63 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BI PCM SV MASTER - FINAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SV MASTER - BI & Checklist</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --sv-blue-dark: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue-dark); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue-dark); color: var(--sv-text); margin: 0; padding: 0; overflow: hidden; }
 
-        /* Splash */
-        #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue-dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #splash img { width: 180px; animation: entrance 1s ease-out; }
+        /* Splash Screen Profissional */
+        #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue-dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
+        #splash img { width: 220px; animation: entrance 1s ease-out; }
         @keyframes entrance { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        .navbar { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
-        .navbar img { height: 35px; }
-        .navbar h2 { font-size: 14px; margin: 0; color: var(--sv-yellow); }
+        /* Navegação por Abas (Rodapé) */
+        .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--sv-blue-mid); display: flex; border-top: 2px solid var(--sv-yellow); z-index: 999; height: 70px; padding-bottom: env(safe-area-inset-bottom); }
+        .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: #888; font-size: 11px; }
+        .tab-item.active { color: var(--sv-yellow); background: rgba(255, 214, 10, 0.1); font-weight: bold; }
+        .tab-item svg { width: 24px; height: 24px; margin-bottom: 4px; fill: currentColor; }
 
-        .main { padding: 10px; max-width: 1600px; margin: auto; }
-        
-        .filter-section { background: var(--sv-blue-mid); padding: 12px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; width: 100%; }
-        .btn-pdf { background: #27ae60; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        /* Views (Telas) */
+        .content-view { display: none; height: calc(100vh - 70px); overflow-y: auto; padding-bottom: 30px; }
+        .content-view.active { display: block; }
 
-        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
-        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
-        .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
-        .kpi-card .value { font-size: 16px; font-weight: 800; margin: 5px 0; color: white; }
+        /* Estilo Navbar */
+        .navbar { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--sv-yellow); position: sticky; top: 0; z-index: 100; }
+        .navbar img { height: 40px; }
+        .navbar h2 { font-size: 14px; margin: 0; color: var(--sv-yellow); text-transform: uppercase; }
 
-        .charts-container { display: flex; flex-direction: column; gap: 15px; }
-        @media (min-width: 992px) { .charts-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; } }
-        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; }
-        .chart-card h4 { margin: 0 0 12px 0; color: var(--sv-yellow); font-size: 11px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
-        .canvas-wrapper { position: relative; height: 280px; width: 100%; }
+        /* Estilos do Checklist (Adaptado do seu index (1).html) */
+        .form-container { padding: 20px; max-width: 500px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--sv-yellow); font-size: 13px; font-weight: bold; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--sv-yellow); background: #001d3d; color: white; outline: none; font-size: 16px; }
+        .btn-submit { width: 100%; padding: 15px; background: var(--sv-yellow); color: var(--sv-blue-dark); border: none; border-radius: 8px; font-weight: 800; font-size: 16px; cursor: pointer; text-transform: uppercase; }
 
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue-dark); z-index: 10001; padding: 10px; overflow-y: auto; }
-        .modal-content { background: white; color: #333; border-radius: 10px; padding: 15px; width: 100%; }
-        .table-responsive { overflow-x: auto; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 10px; min-width: 600px; }
-        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+        /* Estilos do BI (KPIs e Gráficos) */
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; }
+        @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(4, 1fr); } }
+        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .kpi-card h3 { margin: 0; font-size: 10px; color: var(--sv-yellow); text-transform: uppercase; }
+        .kpi-card .value { font-size: 18px; font-weight: 800; margin-top: 5px; color: white; }
+
+        .charts-container { display: flex; flex-direction: column; gap: 15px; padding: 0 15px; }
+        @media (min-width: 992px) { .charts-container { display: grid; grid-template-columns: 1fr 1fr; } }
+        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; cursor: pointer; }
+        .chart-card h4 { margin: 0 0 12px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .canvas-wrapper { position: relative; height: 300px; width: 100%; }
+
+        /* Modal Dril-down */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,29,61,0.95); z-index: 2000; padding: 10px; overflow-y: auto; }
+        .modal-content { background: white; color: #333; border-radius: 10px; padding: 15px; width: 100%; max-width: 1200px; margin: auto; }
+        .table-responsive { overflow-x: auto; margin-top: 15px; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 800px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #eee; font-weight: bold; position: sticky; top: 0; }
     </style>
 </head>
 <body>
@@ -52,147 +67,153 @@
 
 <div id="modal">
     <div class="modal-content">
-        <button onclick="closeModal()" style="float:right; background:#d32f2f; color:white; border:none; padding:8px 12px; border-radius:5px; font-weight:bold;">X</button>
-        <h3 id="modalTitle" style="margin-top:0; color:#003566;">Detalhes</h3>
+        <button onclick="closeModal()" style="float:right; background:#d32f2f; color:white; border:none; padding:8px 15px; border-radius:5px; font-weight:bold; cursor:pointer;">FECHAR</button>
+        <h3 id="modalTitle" style="color:var(--sv-blue-mid);">Detalhes da Seleção</h3>
         <div class="table-responsive">
             <table>
-                <thead><tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Valor</th><th>HH</th><th>Status</th></tr></thead>
+                <thead><tr><th>OS</th><th>Data</th><th>Prefixo</th><th>Sistema</th><th>Manutenção</th><th>Produtos</th><th>HH</th><th>Status</th></tr></thead>
                 <tbody id="modalBody"></tbody>
             </table>
         </div>
     </div>
 </div>
 
-<div class="navbar"><img src="Logo.png" alt="SV Logística"><h2>PCM MASTER v3.0</h2></div>
-
-<div class="main" id="pdfArea">
-    <div class="filter-section">
-        <input type="month" id="fData" onchange="updateDashboard()">
-        <select id="fManut" onchange="updateDashboard()"><option value="">Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
-        <select id="fStatus" onchange="updateDashboard()"><option value="">Status</option><option value="Finalizada">Finalizadas</option><option value="Aberta">Abertas</option></select>
-        <button class="btn-pdf" onclick="exportPDF()">PDF</button>
+<div id="view-checklist" class="content-view active">
+    <div class="navbar"><img src="Logo.png" alt="SV Logística"><h2>Checklist Frota</h2></div>
+    <div class="form-container">
+        <form id="checklistForm">
+            <div class="form-group"><label>Placa / Prefixo</label><input type="text" name="veiculo" placeholder="Ex: SV-45" required></div>
+            <div class="form-group"><label>Motorista</label><input type="text" name="motorista" required></div>
+            <div class="form-group"><label>Sistema</label>
+                <select name="sistema">
+                    <option value="Motor">Motor</option><option value="Pneus">Pneus</option><option value="Elétrica">Elétrica</option>
+                    <option value="Freios">Freios</option><option value="Suspensão">Suspensão</option><option value="Outros">Outros</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Relato</label><textarea name="descricao" rows="3"></textarea></div>
+            <button type="submit" class="btn-submit">Enviar Checklist</button>
+        </form>
     </div>
+</div>
 
-    <div class="kpi-grid">
-        <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
-        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
-        <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
-        <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
-        <div class="kpi-card"><h3>MÉDIA/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
-        <div class="kpi-card"><h3>CUSTO/HH</h3><div class="value" id="kHHVal" style="color:#4CC9F0">R$ 0</div></div>
+<div id="view-bi" class="content-view">
+    <div class="navbar"><img src="Logo.png" alt="SV Logística"><h2>PCM Intelligence</h2></div>
+    <div class="main">
+        <div class="kpi-grid">
+            <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
+            <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
+            <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
+            <div class="kpi-card"><h3>MÉDIA/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
+        </div>
+        <div class="charts-container">
+            <div class="chart-card" onclick="trackClick()"><h4>Pareto: Volume OS / Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
+            <div class="chart-card"><h4>HH Acumulado por Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
+            <div class="chart-card"><h4>Top 10 Custo por Equipamento</h4><div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div></div>
+            <div class="chart-card"><h4>Distribuição % Sistemas</h4><div class="canvas-wrapper"><canvas id="cPizza"></canvas></div></div>
+        </div>
     </div>
+</div>
 
-    <div class="charts-container">
-        <div class="chart-card"><h4>Pareto: Volume OS / Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
-        <div class="chart-card"><h4>HH Acumulado / Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
-        <div class="chart-card"><h4>Tendência Mensal</h4><div class="canvas-wrapper"><canvas id="cTrend"></canvas></div></div>
-        <div class="chart-card"><h4>Top 10 Custo Equipamento</h4><div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div></div>
-        <div class="chart-card"><h4>Top 10 Freq. Equipamento</h4><div class="canvas-wrapper"><canvas id="cEquipFreq"></canvas></div></div>
-        <div class="chart-card"><h4>HH por Sistema (Ranking)</h4><div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div></div>
-        <div class="chart-card"><h4>Distribuição % Sistemas</h4><div class="canvas-wrapper"><canvas id="cPizza"></canvas></div></div>
+<div class="tab-bar">
+    <div class="tab-item active" onclick="switchTab('view-checklist', this)">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        Checklist
+    </div>
+    <div class="tab-item" onclick="switchTab('view-bi', this)">
+        <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>
+        Dashboard
     </div>
 </div>
 
 <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbyzjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
-    let rawData = [];
-    let charts = {};
+    // ⚠️ COLOQUE SUAS DUAS URLs AQUI
+    const URL_CHECKLIST = "https://script.google.com/macros/s/AKfycbxXLqXBs3Of8h2TE1I2B61NfcJVONzHe45wGpzRaXlHdSAnBsdrZ67aALUjiN3DVj1z/exec"; // Url do script que faz o POST
+    const URL_BI = "https://script.google.com/macros/s/AKfycbyzjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
 
+    let rawData = [], charts = {};
     Chart.register(ChartDataLabels);
 
-    const cfg = (type = 'qty') => ({
-        maintainAspectRatio: false,
-        plugins: { 
-            datalabels: { 
-                color: '#fff', 
-                font: { weight: 'bold', size: 9 }, 
-                anchor: 'end', 
-                align: 'top',
-                formatter: (val) => {
-                    let rounded = Math.round(val);
-                    if (type === 'money') return 'R$ ' + rounded.toLocaleString('pt-br');
-                    return rounded;
-                }
-            },
-            legend: { display: false }
-        },
-        onClick: (e, activeEls) => { if(activeEls.length > 0) openDetails(e.chart.data.labels[activeEls[0].index]); },
-        scales: { 
-            y: { ticks: { color: '#aaa', font: {size: 9} }, grid: { color: 'rgba(255,255,255,0.05)' } }, 
-            x: { ticks: { color: '#fff', font: {size: 9} } } 
-        }
-    });
-
-    async function init() {
-        try {
-            const res = await fetch(URL_API);
-            rawData = await res.json();
-            document.getElementById('splash').style.display = 'none';
-            updateDashboard();
-        } catch (e) { console.error(e); }
+    // Navegação entre Telas
+    function switchTab(tabId, el) {
+        document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        el.classList.add('active');
+        if(tabId === 'view-bi') loadBI();
     }
 
-    function updateDashboard() {
-        const valData = document.getElementById('fData').value;
-        const valManut = document.getElementById('fManut').value;
-        const valStatus = document.getElementById('fStatus').value;
+    // Envio do Checklist
+    document.getElementById('checklistForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = "ENVIANDO..."; btn.disabled = true;
+        const formData = new FormData(e.target);
+        const payload = Object.fromEntries(formData);
+        try {
+            await fetch(URL_CHECKLIST, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+            alert("✅ Checklist enviado com sucesso!"); e.target.reset();
+        } catch (e) { alert("Erro ao enviar."); } finally { btn.innerText = "Enviar Checklist"; btn.disabled = false; }
+    };
 
-        const data = rawData.filter(d => {
-            let dm = valData ? String(d.data_e_hora_de_inicio).includes(valData) : true;
-            let mm = valManut ? d.manutencao === valManut : true;
-            let sm = valStatus ? d.status === valStatus : true;
-            return dm && mm && sm;
-        });
+    // Lógica do BI
+    async function loadBI() {
+        try {
+            const res = await fetch(URL_BI);
+            rawData = await res.json();
+            updateKPIs(rawData);
+            renderCharts(rawData);
+            document.getElementById('splash').style.display = 'none';
+        } catch (e) { console.error("Erro no BI", e); }
+    }
 
+    function updateKPIs(data) {
         const total = data.length;
         const custo = data.reduce((acc, d) => acc + (d.produtos || 0), 0);
         const hh = data.reduce((acc, d) => acc + (d.hh || 0), 0);
-
         document.getElementById('kTotal').innerText = total;
-        document.getElementById('kAbertas').innerText = data.filter(d => d.status === 'Aberta').length;
-        document.getElementById('kFechadas').innerText = data.filter(d => d.status === 'Finalizada').length;
         document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
         document.getElementById('kHH').innerText = Math.round(hh) + "h";
         document.getElementById('kAvg').innerText = (custo/total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-
-        renderCharts(data);
     }
 
     function renderCharts(data) {
         Object.values(charts).forEach(c => c.destroy());
+        const cfg = (isMoney=false, isHH=false) => ({
+            maintainAspectRatio: false,
+            plugins: { 
+                datalabels: { color: '#fff', font: { weight: 'bold', size: 10 }, formatter: v => isMoney ? 'R$ '+Math.round(v) : Math.round(v) },
+                legend: { display: false }
+            },
+            onClick: (e, activeEls) => { if(activeEls.length > 0) openDetails(e.chart.data.labels[activeEls[0].index]); },
+            scales: { y: { ticks: { color: '#aaa', font: {size: 9} }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#fff', font: {size: 9} } } }
+        });
 
-        charts.cPareto = new Chart(document.getElementById('cPareto'), { type: 'bar', data: { labels: countAndSort(data, "sistema").labels, datasets: [{ data: countAndSort(data, "sistema").values, backgroundColor: '#FFD60A' }] }, options: cfg('qty') });
-        charts.cHH = new Chart(document.getElementById('cHH'), { type: 'bar', data: { labels: sumAndSort(data, "sistema", "hh").labels, datasets: [{ data: sumAndSort(data, "sistema", "hh").values, backgroundColor: '#00A8E8' }] }, options: cfg('qty') });
-        
-        const tD = trend(data);
-        charts.cTrend = new Chart(document.getElementById('cTrend'), { type: 'line', data: { labels: tD.labels, datasets: [{ data: tD.values, borderColor: '#FFD60A', tension: 0.3, fill: true, backgroundColor: 'rgba(255,214,10,0.1)' }] }, options: cfg('qty') });
-        
-        const cD = sumAndSort(data, "cod_sec_veiculo", "produtos", 10);
-        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type: 'bar', data: { labels: cD.labels, datasets: [{ data: cD.values, backgroundColor: '#ef4444' }] }, options: {...cfg('money'), indexAxis: 'y'} });
+        const pData = process(data, "sistema", "count");
+        charts.cPareto = new Chart(document.getElementById('cPareto'), { type: 'bar', data: { labels: pData.l, datasets: [{ data: pData.v, backgroundColor: '#FFD60A' }] }, options: cfg() });
 
-        const eD = countAndSort(data, "cod_sec_veiculo", 10);
-        charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type: 'bar', data: { labels: eD.labels, datasets: [{ data: eD.values, backgroundColor: '#4CC9F0' }] }, options: {...cfg('qty'), indexAxis: 'y'} });
+        const hData = process(data, "sistema", "sum", "hh");
+        charts.cHH = new Chart(document.getElementById('cHH'), { type: 'bar', data: { labels: hData.l, datasets: [{ data: hData.v, backgroundColor: '#00A8E8' }] }, options: cfg(false, true) });
 
-        const hH = sumAndSort(data, "sistema", "hh");
-        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type: 'bar', data: { labels: hH.labels, datasets: [{ data: hH.values, backgroundColor: '#7209B7' }] }, options: {...cfg('qty'), indexAxis: 'y'} });
+        const cData = process(data, "cod_sec_veiculo", "sum", "produtos", 10);
+        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type: 'bar', data: { labels: cData.l, datasets: [{ data: cData.v, backgroundColor: '#ef4444' }] }, options: {...cfg(true), indexAxis: 'y'} });
 
-        const pD = countAndSort(data, "sistema");
-        charts.cPizza = new Chart(document.getElementById('cPizza'), { type: 'pie', data: { labels: pD.labels, datasets: [{ data: pD.values, backgroundColor: ['#FFD60A', '#00A8E8', '#4CC9F0', '#7209B7', '#F72585'] }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: {color:'#fff', font:{size:8}} } } } });
+        const pizza = process(data, "sistema", "count");
+        charts.cPizza = new Chart(document.getElementById('cPizza'), { type: 'pie', data: { labels: pizza.l, datasets: [{ data: pizza.v, backgroundColor: ['#FFD60A', '#00A8E8', '#4CC9F0', '#7209B7', '#F72585'] }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: {color:'#fff', font:{size:8}} } } } });
+    }
+
+    function process(arr, key, type, sumKey, limit = 99) {
+        const m = arr.reduce((acc, d) => { const x = d[key] || "N/A"; acc[x] = (acc[x] || 0) + (type === "sum" ? (d[sumKey] || 0) : 1); return acc; }, {});
+        const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, limit);
+        return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) };
     }
 
     function openDetails(val) {
         const filtered = rawData.filter(d => d.sistema === val || d.cod_sec_veiculo === val);
-        document.getElementById('modalBody').innerHTML = filtered.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.data_e_hora_de_inicio}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td style="color:${d.status=='Aberta'?'red':'green'}">${d.status}</td></tr>`).join('');
+        document.getElementById('modalBody').innerHTML = filtered.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.data_e_hora_de_inicio}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>${d.manutencao}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td style="color:${d.status=='Aberta'?'red':'green'}">${d.status}</td></tr>`).join('');
         document.getElementById('modal').style.display = 'block';
     }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    function sumAndSort(arr, k, s, l=99) { const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (d[s] || 0); return acc; }, {}); const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l); return { labels: sorted.map(x=>x[0]), values: sorted.map(x=>x[1]) }; }
-    function countAndSort(arr, k, l=99) { const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + 1; return acc; }, {}); const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l); return { labels: sorted.map(x=>x[0]), values: sorted.map(x=>x[1]) }; }
-    function trend(arr) { const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {}); const s = Object.entries(m).sort(); return { labels: s.map(x=>x[0]), values: s.map(x=>x[1]) }; }
-    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin: 2, filename: 'PCM_SV.pdf', html2canvas: { scale: 2 }, jsPDF: { orientation: 'landscape' } }).save(); }
-    init();
+    window.onload = loadBI;
 </script>
 </body>
 </html>
