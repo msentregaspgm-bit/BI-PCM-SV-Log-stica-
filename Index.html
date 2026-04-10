@@ -23,7 +23,7 @@
 
 <div id="loader">
     <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">SV LOGÍSTICA</div>
-    <b>SINCROZINANDO DADOS...</b>
+    <b>SINCRONIZANDO DADOS...</b>
 </div>
 
 <div class="container" id="app">
@@ -42,21 +42,19 @@
     </div>
 
     <div class="chart-grid">
-        <div class="chart-box"><h4>Sistemas Críticos</h4><canvas id="chartSist" height="300"></canvas></div>
-        <div class="chart-box"><h4>Mix Manutenção</h4><canvas id="chartMix" height="300"></canvas></div>
+        <div class="chart-card"><h4>Sistemas Críticos</h4><canvas id="chartSist" height="300"></canvas></div>
+        <div class="chart-card"><h4>Mix Manutenção</h4><canvas id="chartMix" height="300"></canvas></div>
     </div>
 </div>
 
 <script>
-    // ⚠️ COLOQUE AQUI O SEU LINK DO GOOGLE (DO TERMINADO EM /EXEC)
-    const URL_API = "https://script.google.com/macros/s/AKfycbxFCw2R_0ba-mGtqqWf10DxhpQZcxujhCDKt_thYoCFfhj8P66XWvXf1cXpQh4Bkju7/exec";
+    // ABAIXO, COLOQUE O LINK ENTRE AS ASPAS (Cuidado para não apagar as aspas)
+    const URL_API = "https://script.google.com/macros/s/AKfycbxe31bbvjNx2WdKD7PyCMcViNZtLlvRoMiCNmt50bvrT_deFPgR6iqAZ742ekEbHqkTLw/exec";
 
     async function start() {
         try {
-            // O segredo está aqui: o modo 'cors' e o redirecionamento 'follow'
             const response = await fetch(URL_API, {
                 method: 'GET',
-                mode: 'cors',
                 redirect: 'follow'
             });
 
@@ -71,7 +69,7 @@
                 document.getElementById('app').style.display = 'block';
             }
         } catch (e) {
-            showError("Falha ao ler a planilha. Certifique-se que a implantação está como 'Qualquer Pessoa' e use o link /exec.");
+            showError("Falha ao ler a planilha. Verifique a URL_API e a implantação.");
             console.error(e);
         } finally {
             document.getElementById('loader').style.display = 'none';
@@ -81,7 +79,7 @@
     function showError(txt) {
         const err = document.getElementById('error-msg');
         err.style.display = 'block';
-        err.innerHTML = "<b>ERRO DE CONEXÃO:</b> <br>" + txt;
+        err.innerHTML = "<b>ERRO:</b> <br>" + txt;
         document.getElementById('app').style.display = 'block';
     }
 
@@ -95,7 +93,6 @@
         document.getElementById('vAlta').innerText = alta;
         document.getElementById('vCusto').innerText = custo.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
 
-        // Gráfico Sistemas
         const sMap = {}; dados.forEach(o => { const s = o.sistema || "Geral"; sMap[s] = (sMap[s] || 0) + 1; });
         const labels = Object.entries(sMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
         new Chart(document.getElementById('chartSist'), {
@@ -104,7 +101,6 @@
             options: { indexAxis: 'y', plugins: { legend: {display:false} } }
         });
 
-        // Gráfico Mix
         const tMap = {}; dados.forEach(o => { const t = o.manutencao || "Outros"; tMap[t] = (tMap[t] || 0) + 1; });
         new Chart(document.getElementById('chartMix'), {
             type: 'pie',
