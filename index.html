@@ -13,59 +13,43 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* Splash Screen */
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.8s; }
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
         #splash img { width: 180px; animation: entrance 1.2s ease-out forwards; }
         @keyframes entrance { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* Menu Home */
         #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
         .logo-home { width: 220px; margin-bottom: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
-        .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .menu-card:active { transform: scale(0.95); background: var(--sv-yellow); color: var(--sv-blue); }
-        .menu-card h2 { margin: 10px 0; font-size: 1.2rem; text-transform: uppercase; }
+        .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; text-align: center; }
+        .menu-card h2 { margin: 10px 0; font-size: 1.2rem; text-transform: uppercase; color: var(--sv-yellow); }
 
-        /* Navbar */
         .navbar { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
         .navbar img { height: 35px; }
-        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); font-size: 11px; }
+        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); }
 
-        /* Telas */
         .screen { display: none; padding: 15px; max-width: 1400px; margin: auto; padding-bottom: 80px; }
-        .active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .active { display: block; }
 
-        /* Filtros */
+        /* Filtros BI */
         .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; border: 1px solid rgba(255,255,255,0.1); }
         select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; width: 100%; }
 
-        /* KPIs */
         .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px; }
         @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
         .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
         .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
         .kpi-card .value { font-size: 18px; font-weight: 800; margin: 5px 0; color: white; }
 
-        /* Gráficos */
-        .charts-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 992px) { .charts-container { grid-template-columns: 1fr 1fr; } }
-        .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; }
         .canvas-wrapper { position: relative; height: 300px; width: 100%; }
 
-        /* Modal */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,29,61,0.95); z-index: 2000; padding: 15px; overflow-y: auto; }
-        .modal-content { background: white; color: #333; border-radius: 12px; padding: 20px; max-width: 1200px; margin: auto; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; font-size: 11px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-
-        /* Checklist Styles */
-        .category-block { background: var(--sv-blue-mid); border-radius: 10px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-        .category-title { background: rgba(255,214,10,0.1); color: var(--sv-yellow); font-weight: 800; padding: 10px 15px; font-size: 11px; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .res-check { width: auto; min-width: 80px; }
-        label { display: block; margin: 15px 0 5px; font-weight: bold; color: var(--sv-yellow); font-size: 11px; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 20000; padding: 15px; overflow-y: auto; }
+        .modal-content { background: white; color: #333; border-radius: 12px; padding: 20px; }
+        
+        .category-block { background: var(--sv-blue-mid); border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--sv-yellow); overflow: hidden; }
+        .category-title { background: var(--sv-yellow); color: var(--sv-blue); font-weight: 800; padding: 10px; font-size: 12px; }
+        .item-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
@@ -82,72 +66,58 @@
 
 <div id="screen-checklist" class="screen">
     <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
-    <div style="max-width: 500px; margin: auto;">
-        <label>Operador</label><input type="text" id="operador" placeholder="Seu nome">
-        <label>Tipo da Máquina</label><select id="tipoMaquina" onchange="filtraIDs()"><option value="">Selecione...</option></select>
-        <label>ID da Máquina</label><select id="idMaquina"><option value="">Aguardando...</option></select>
-        <button onclick="irParaChecklist()" style="background:var(--sv-yellow); width:100%; padding:18px; border:none; border-radius:10px; font-weight:800; cursor:pointer; margin-top:10px;">INICIAR INSPEÇÃO</button>
-        <button onclick="showScreen('dash-check')" style="background:var(--sv-blue-mid); color:white; width:100%; padding:15px; border:none; border-radius:10px; font-weight:bold; margin-top:20px; cursor:pointer;">INDICADORES CHECKLIST</button>
+    <div style="max-width: 500px; margin: auto; padding-top: 20px;">
+        <label>Operador</label><input type="text" id="operador">
+        <label>Tipo da Máquina</label><select id="tipoMaquina" onchange="filtraIDs()"></select>
+        <label>ID da Máquina</label><select id="idMaquina"></select>
+        <button onclick="irParaChecklist()" class="btn-voltar" style="width:100%; padding:15px; margin-top:10px;">INICIAR</button>
+        <button onclick="showScreen('dash-check')" class="btn-voltar" style="width:100%; padding:15px; margin-top:20px; background:#444; color:white;">INDICADORES</button>
     </div>
 </div>
 
 <div id="screen-exec" class="screen">
-    <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center;"></div>
+    <div id="banner" style="text-align:center; padding:15px; font-weight:bold; color:var(--sv-yellow);"></div>
     <div id="checklistArea"></div>
-    <label>Observações</label><textarea id="obs" rows="3" style="width:100%; background:var(--sv-blue); color:white; border:1px solid var(--sv-yellow); border-radius:8px;"></textarea>
-    <button id="btnSalvar" onclick="salvarChecklist()" style="background:var(--sv-yellow); width:100%; padding:18px; border:none; border-radius:10px; font-weight:800; cursor:pointer; margin-top:15px;">FINALIZAR E ENVIAR</button>
+    <textarea id="obs" placeholder="Observações..." style="width:100%; height:80px; background:#001d3d; color:white; border:1px solid var(--sv-yellow); border-radius:8px; padding:10px;"></textarea>
+    <button id="btnSalvar" onclick="salvarChecklist()" style="width:100%; background:var(--sv-yellow); border:none; padding:20px; border-radius:10px; font-weight:800; margin-top:15px;">ENVIAR</button>
 </div>
 
 <div id="screen-bi" class="screen">
     <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
     
     <div class="filter-section" style="margin-top:20px;">
-        <input type="month" id="fDataBI" onchange="updateDashboardBI()">
-        <select id="fManutBI" onchange="updateDashboardBI()">
-            <option value="">Manutenção: Todas</option>
-            <option value="Corretiva">Corretiva</option>
-            <option value="Preventiva">Preventiva</option>
-        </select>
-        <select id="fStatusBI" onchange="updateDashboardBI()">
-            <option value="">Status: Todos</option>
-            <option value="Finalizada">Finalizada</option>
-            <option value="Aberta">Aberta</option>
-        </select>
-        <button onclick="exportPDF()" style="background:#27ae60; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">PDF</button>
+        <input type="month" id="fDataBI">
+        <select id="fManutBI"><option value="">Todas Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
+        <select id="fStatusBI"><option value="">Todos Status</option><option value="Finalizada">Finalizada</option><option value="Aberta">Aberta</option></select>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>Total OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
-        <div class="kpi-card"><h3>Fechadas</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
+        <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas">0</div></div>
         <div class="kpi-card"><h3>Custo Peças</h3><div class="value" id="kCusto">R$ 0</div></div>
-        <div class="kpi-card"><h3>Total HH</h3><div class="value" id="kHH">0h</div></div>
-        <div class="kpi-card"><h3>Média/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
-        <div class="kpi-card"><h3>Custo/HH</h3><div class="value" id="kHHVal">R$ 0</div></div>
+        <div class="kpi-card"><h3>HH Total</h3><div class="value" id="kHH">0h</div></div>
     </div>
 
-    <div class="charts-container" id="pdfArea">
-        <div class="chart-card"><h4>Pareto: Volume OS / Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
-        <div class="chart-card"><h4>HH Acumulado / Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
+    <div id="pdfArea">
+        <div class="chart-card"><h4>Volume OS / Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
+        <div class="chart-card"><h4>HH / Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
+        <div class="chart-card"><h4>Top Custo Equipamento</h4><div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div></div>
         <div class="chart-card"><h4>Tendência Mensal</h4><div class="canvas-wrapper"><canvas id="cTrend"></canvas></div></div>
-        <div class="chart-card"><h4>Top 10 Custo Equipamento</h4><div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div></div>
-        <div class="chart-card"><h4>Top 10 Freq. Equipamento</h4><div class="canvas-wrapper"><canvas id="cEquipFreq"></canvas></div></div>
-        <div class="chart-card"><h4>HH por Sistema (Ranking)</h4><div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div></div>
-        <div class="chart-card"><h4>Distribuição % Sistemas</h4><div class="canvas-wrapper"><canvas id="cPizzaBI"></canvas></div></div>
+        <div class="chart-card"><h4>Top 10 Frequência</h4><div class="canvas-wrapper"><canvas id="cEquipFreq"></canvas></div></div>
+        <div class="chart-card"><h4>HH Sistema (Horiz)</h4><div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div></div>
+        <div class="chart-card"><h4>Distribuição %</h4><div class="canvas-wrapper"><canvas id="cPizzaBI"></canvas></div></div>
     </div>
 </div>
 
 <div id="screen-dash-check" class="screen">
     <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="showScreen('checklist')">VOLTAR</button></div>
-    <div class="chart-card" style="margin-top:20px;"><h4>Status Itens (OK x NOK)</h4><canvas id="chartPizzaCheck" height="250"></canvas></div>
-    <div class="chart-card"><h4>Top 5 Falhas Apontadas</h4><canvas id="chartBarrasCheck" height="250"></canvas></div>
+    <div class="chart-card" style="margin-top:20px;"><h4>Status OK x NOK</h4><canvas id="chartPizzaCheck"></canvas></div>
 </div>
 
 <div id="modal">
     <div class="modal-content">
-        <button onclick="closeModal()" style="float:right; background:red; color:white; border:none; padding:10px; border-radius:5px;">X</button>
-        <h3 id="modalTitle">Detalhes</h3>
-        <div class="table-res"><table><thead><tr><th>OS</th><th>Prefixo</th><th>Sistema</th><th>Valor</th><th>HH</th><th>Status</th></tr></thead><tbody id="modalBody"></tbody></table></div>
+        <button onclick="closeModal()" style="float:right;">X</button>
+        <div id="modalBody"></div>
     </div>
 </div>
 
@@ -155,43 +125,90 @@
     const URL_CHECKLIST = "https://script.google.com/macros/s/AKfycbxXLqXBs3Of8h2TE1I2B61NfcJVONzHe45wGpzRaXlHdSAnBsdrZ67aALUjiN3DVj1z/exec";
     const URL_BI = "https://script.google.com/macros/s/AKfycbyzjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
 
-    let dMaquinas = [], dItens = [], dHistorico = [], rawBI = [], charts = {};
+    let rawBI = [], dHistorico = [], dMaquinas = [], dItens = [], charts = {};
     Chart.register(ChartDataLabels);
 
     window.onload = async () => {
-        try {
-            const resC = await fetch(URL_CHECKLIST);
-            const dataC = await resC.json();
-            dMaquinas = dataC.maquinas || []; dItens = dataC.itens || []; dHistorico = dataC.historico || [];
-            const selT = document.getElementById('tipoMaquina');
-            [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => { if(t) selT.innerHTML += `<option value="${t}">${t}</option>`; });
-            document.getElementById('splash').style.display = 'none';
-        } catch (e) { console.error(e); }
+        const resC = await fetch(URL_CHECKLIST); const dataC = await resC.json();
+        dMaquinas = dataC.maquinas; dItens = dataC.itens; dHistorico = dataC.historico;
+        const selT = document.getElementById('tipoMaquina');
+        selT.innerHTML = '<option value="">Tipo...</option>';
+        [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
+        
+        // Ativar escuta dos filtros BI ANTES de carregar
+        ['fDataBI', 'fManutBI', 'fStatusBI'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updateBI);
+        });
+
+        document.getElementById('splash').style.display = 'none';
     };
 
-    function showScreen(screenId) {
+    function showScreen(id) {
         document.querySelectorAll('.screen, #screen-home').forEach(s => s.style.display = 'none');
-        document.getElementById('screen-' + screenId).style.display = 'block';
-        if(screenId === 'bi') loadBI();
-        if(screenId === 'dash-check') renderDashCheck();
+        document.getElementById('screen-' + id).style.display = 'block';
+        if(id === 'bi') loadBI();
+        if(id === 'dash-check') renderDashCheck();
     }
 
-    // --- CHECKLIST ---
+    async function loadBI() {
+        if(rawBI.length === 0) {
+            const res = await fetch(URL_BI);
+            rawBI = await res.json();
+        }
+        updateBI();
+    }
+
+    function updateBI() {
+        const fD = document.getElementById('fDataBI').value;
+        const fM = document.getElementById('fManutBI').value;
+        const fS = document.getElementById('fStatusBI').value;
+
+        const filtered = rawBI.filter(d => {
+            return (fD ? String(d.data_e_hora_de_inicio).includes(fD) : true) &&
+                   (fM ? d.manutencao === fM : true) &&
+                   (fS ? d.status === fS : true);
+        });
+
+        // Atualizar Balões
+        document.getElementById('kTotal').innerText = filtered.length;
+        document.getElementById('kAbertas').innerText = filtered.filter(x => x.status === 'Aberta').length;
+        const custo = filtered.reduce((a, b) => a + (b.produtos || 0), 0);
+        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+        document.getElementById('kHH').innerText = Math.round(filtered.reduce((a, b) => a + (b.hh || 0), 0)) + "h";
+
+        renderAllCharts(filtered);
+    }
+
+    function renderAllCharts(data) {
+        // ESSA É A PARTE CRÍTICA: Destruir e recriar com os NOVOS dados
+        const chartIds = ['cPareto', 'cHH', 'cTrend', 'cCustoEquip', 'cEquipFreq', 'cHHHoriz', 'cPizzaBI'];
+        chartIds.forEach(id => { if(charts[id]) charts[id].destroy(); });
+
+        const cfg = (m = false) => ({
+            maintainAspectRatio: false,
+            plugins: { datalabels: { color: '#fff', font:{weight:'bold'}, formatter: v => m ? 'R$ '+Math.round(v) : Math.round(v) }, legend:{display:false} },
+            scales: { y:{ ticks:{color:'#aaa', font:{size:9}} }, x:{ ticks:{color:'#fff', font:{size:9}} } }
+        });
+
+        charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
+        charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
+        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
+        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
+        charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7']}] }, options:{ maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:'#fff', font:{size:8}}}} } });
+    }
+
+    // Funções de Checklist
     function filtraIDs() {
-        const t = document.getElementById('tipoMaquina').value;
-        const s = document.getElementById('idMaquina');
-        s.innerHTML = '<option value="">Selecione...</option>';
-        dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => { s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`; });
+        const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina');
+        s.innerHTML = ''; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`);
     }
     function irParaChecklist() {
-        const id = document.getElementById('idMaquina').value, t = document.getElementById('tipoMaquina').value;
-        if(!id) return alert("Selecione!");
-        const itensF = dItens.filter(i => i.tipo_maquina.toString().toLowerCase() === t.toLowerCase());
-        const maq = dMaquinas.find(m => m.id_maquina === id);
-        document.getElementById('banner').innerText = `ID: ${id} | PLACA: ${maq.placa}`;
+        const id = document.getElementById('idMaquina').value; const t = document.getElementById('tipoMaquina').value;
+        const itensF = dItens.filter(i => i.tipo_maquina.trim().toLowerCase() === t.trim().toLowerCase());
         const area = document.getElementById('checklistArea'); area.innerHTML = "";
-        const cats = [...new Set(itensF.map(i => i.categoria))];
-        cats.forEach(c => {
+        [...new Set(itensF.map(i => i.categoria))].forEach(c => {
             let h = `<div class="category-block"><div class="category-title">${c}</div>`;
             itensF.filter(i => i.categoria === c).forEach(it => {
                 h += `<div class="item-row"><span>${it.item}</span><select class="res-check" data-name="${it.item}"><option value="OK">OK</option><option value="NOK">NOK</option></select></div>`;
@@ -201,72 +218,20 @@
         showScreen('exec');
     }
     async function salvarChecklist() {
+        const btn = document.getElementById('btnSalvar'); btn.disabled = true;
         const resps = Array.from(document.querySelectorAll('.res-check')).map(s => ({ item: s.dataset.name, status: s.value }));
-        const payload = { operador: document.getElementById('operador').value, idMaquina: document.getElementById('idMaquina').value, respostas: resps, observacao: document.getElementById('obs').value };
-        await fetch(URL_CHECKLIST, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        const payload = { operador: document.getElementById('operador').value, idMaquina: document.getElementById('idMaquina').value, respostas: resps };
+        await fetch(URL_CHECKLIST, { method:'POST', mode:'no-cors', body:JSON.stringify(payload) });
         alert("Enviado!"); location.reload();
     }
 
-    // --- BI GESTÃO COMPLETO ---
-    async function loadBI() {
-        const res = await fetch(URL_BI);
-        rawBI = await res.json();
-        updateDashboardBI();
-    }
-
-    function updateDashboardBI() {
-        const fDate = document.getElementById('fDataBI').value;
-        const fManut = document.getElementById('fManutBI').value;
-        const fStatus = document.getElementById('fStatusBI').value;
-
-        const data = rawBI.filter(d => {
-            let dM = fDate ? String(d.data_e_hora_de_inicio).includes(fDate) : true;
-            let mM = fManut ? d.manutencao === fManut : true;
-            let sM = fStatus ? d.status === fStatus : true;
-            return dM && mM && sM;
-        });
-
-        // Atualiza Balões
-        const total = data.length, custo = data.reduce((acc, d) => acc + (d.produtos || 0), 0), hh = data.reduce((acc, d) => acc + (d.hh || 0), 0);
-        document.getElementById('kTotal').innerText = total;
-        document.getElementById('kAbertas').innerText = data.filter(d => d.status === 'Aberta').length;
-        document.getElementById('kFechadas').innerText = data.filter(d => d.status === 'Finalizada').length;
-        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        document.getElementById('kHH').innerText = Math.round(hh) + "h";
-        document.getElementById('kAvg').innerText = (custo/total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-        document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-
-        renderChartsBI(data);
-    }
-
-    function renderChartsBI(data) {
-        Object.values(charts).forEach(c => { if(c.id.indexOf('Check') === -1) c.destroy(); });
-        const cfg = (m=false) => ({
-            maintainAspectRatio: false,
-            plugins: { datalabels: { color: '#fff', font:{weight:'bold', size:10}, formatter: v => m ? 'R$ '+Math.round(v) : Math.round(v) }, legend:{display:false} },
-            onClick: (e, activeEls) => { if(activeEls.length > 0) openDetails(e.chart.data.labels[activeEls[0].index]); },
-            scales: { y:{ ticks:{color:'#aaa', font:{size:9}}, grid:{color:'rgba(255,255,255,0.05)'} }, x:{ ticks:{color:'#fff', font:{size:9}} } }
-        });
-
-        charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
-        charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
-        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
-        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
-        charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
-        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
-        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:'#fff',font:{size:8}}}} } });
-    }
-
     function renderDashCheck() {
-        let ok = 0, nok = 0, ranking = {};
-        dHistorico.forEach(f => { if(f.status === "OK") ok++; else { nok++; ranking[f.item] = (ranking[f.item] || 0) + 1; } });
+        let ok = 0, nok = 0; dHistorico.forEach(f => { if(f.status === "OK") ok++; else nok++; });
         if(charts.cPCheck) charts.cPCheck.destroy();
-        charts.cPCheck = new Chart(document.getElementById('chartPizzaCheck'), { type:'pie', data:{ labels:['OK','NOK'], datasets:[{data:[ok,nok], backgroundColor:['#28a745','#d32f2f']}] }, options:{ plugins:{datalabels:{color:'#fff'}} } });
-        const sorted = Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,5);
-        if(charts.cBCheck) charts.cBCheck.destroy();
-        charts.cBCheck = new Chart(document.getElementById('chartBarrasCheck'), { type:'bar', data:{ labels:sorted.map(i=>i[0]), datasets:[{data:sorted.map(i=>i[1]), backgroundColor:'#FFD60A'}] }, options:{ indexAxis:'y', plugins:{legend:{display:false}, datalabels:{color:'#fff'}} } });
+        charts.cPCheck = new Chart(document.getElementById('chartPizzaCheck'), { type:'pie', data:{ labels:['OK','NOK'], datasets:[{data:[ok,nok], backgroundColor:['#28a745','#d32f2f']}] }});
     }
 
+    // Utilitários de Ordenação e Dados
     function sort(arr, k, type, sK, l=99) {
         const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {});
         const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l);
@@ -276,13 +241,6 @@
         const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {});
         const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) };
     }
-    function openDetails(val) {
-        const f = rawBI.filter(d => d.sistema === val || d.cod_sec_veiculo === val);
-        document.getElementById('modalBody').innerHTML = f.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td>${d.status}</td></tr>`).join('');
-        document.getElementById('modal').style.display = 'block';
-    }
-    function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:2, filename:'BI_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
 </script>
 </body>
 </html>
