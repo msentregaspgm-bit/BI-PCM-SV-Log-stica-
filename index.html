@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SV MASTER - Sistema Integrado</title>
+    <title>SV MASTER - Sistema Integrado Total</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -13,108 +13,128 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* Splash Screen Animada */
+        /* Splash Screen */
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.8s; }
         #splash img { width: 180px; animation: entrance 1.2s ease-out forwards; }
         @keyframes entrance { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* Menu Inicial */
-        #menu-inicial { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; padding: 20px; text-align: center; }
-        .logo-home { width: 200px; margin-bottom: 40px; }
+        #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
+        .logo-home { width: 220px; margin-bottom: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
-        .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
+        .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .menu-card:active { transform: scale(0.95); background: var(--sv-yellow); color: var(--sv-blue); }
-        .menu-card svg { width: 50px; height: 50px; margin-bottom: 15px; fill: currentColor; }
-        .menu-card h2 { margin: 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+        .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; }
 
-        /* Estrutura de Telas */
+        /* Navbar */
         .navbar { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
         .navbar img { height: 35px; }
-        .btn-home { background: var(--sv-yellow); border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px; }
-        
-        .screen { display: none; padding: 15px; max-width: 1400px; margin: auto; padding-bottom: 50px; }
+        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); font-size: 11px; }
+
+        /* Telas */
+        .screen { display: none; padding: 15px; max-width: 1400px; margin: auto; padding-bottom: 80px; }
         .active { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Estilos Comuns */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        /* KPIs BI */
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
         .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
-        .kpi-card .value { font-size: 18px; font-weight: 800; color: white; }
-        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
+        .kpi-card .value { font-size: 18px; font-weight: 800; margin: 5px 0; color: white; }
+
+        /* Gráficos */
+        .charts-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 992px) { .charts-container { grid-template-columns: 1fr 1fr; } }
+        .chart-card { background: var(--sv-blue-mid); padding: 18px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
         .canvas-wrapper { position: relative; height: 300px; width: 100%; }
+
+        /* Checklist */
+        .category-block { background: var(--sv-blue-mid); border-radius: 10px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+        .category-title { background: rgba(255,214,10,0.1); color: var(--sv-yellow); font-weight: 800; padding: 10px 15px; font-size: 11px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .res-check { width: auto; min-width: 80px; padding: 5px; background: var(--sv-blue); color: white; border: 1px solid var(--sv-yellow); }
 
         /* Formulários */
         label { display: block; margin: 15px 0 5px; font-weight: bold; color: var(--sv-yellow); font-size: 12px; text-transform: uppercase; }
         input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--sv-yellow); border-radius: 8px; background: var(--sv-blue); color: white; margin-bottom: 10px; }
-        .btn-main { background: var(--sv-yellow); color: #001D3D; width: 100%; padding: 18px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .btn-main { background: var(--sv-yellow); color: #001D3D; width: 100%; padding: 18px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
 
-        /* Tabela Modal */
+        /* Modal */
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,29,61,0.95); z-index: 2000; padding: 15px; overflow-y: auto; }
-        .modal-content { background: white; color: #333; border-radius: 12px; padding: 20px; }
+        .modal-content { background: white; color: #333; border-radius: 12px; padding: 20px; max-width: 1200px; margin: auto; }
         .table-res { overflow-x: auto; font-size: 11px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     </style>
 </head>
 <body>
 
 <div id="splash"><img src="Logo.png" alt="SV Logística"></div>
 
-<div id="screen-home" class="active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
-    <img src="Logo.png" class="logo-home" alt="SV">
+<div id="screen-home" class="active">
+    <img src="Logo.png" class="logo-home">
     <div class="menu-grid">
-        <div class="menu-card" onclick="showScreen('checklist')">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            <h2>Checklist Frota</h2>
-        </div>
-        <div class="menu-card" onclick="showScreen('bi')">
-            <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>
-            <h2>Gestão BI (PCM)</h2>
-        </div>
+        <div class="menu-card" onclick="showScreen('checklist')"><h2>Checklist Frota</h2></div>
+        <div class="menu-card" onclick="showScreen('bi')"><h2>Gestão BI (PCM)</h2></div>
     </div>
 </div>
 
 <div id="screen-checklist" class="screen">
-    <div class="navbar"><img src="Logo.png"> <button class="btn-home" onclick="location.reload()">VOLTAR</button></div>
-    <div style="max-width: 500px; margin: auto; padding: 20px;">
-        <label>Operador</label>
-        <input type="text" id="operador" placeholder="Nome Completo">
-        <label>Tipo da Máquina</label>
-        <select id="tipoMaquina" onchange="filtraIDs()"><option value="">Selecione...</option></select>
-        <label>ID da Máquina</label>
-        <select id="idMaquina"><option value="">Aguardando...</option></select>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div style="max-width: 500px; margin: auto;">
+        <label>Operador</label><input type="text" id="operador" placeholder="Seu nome">
+        <label>Tipo da Máquina</label><select id="tipoMaquina" onchange="filtraIDs()"><option value="">Selecione...</option></select>
+        <label>ID da Máquina</label><select id="idMaquina"><option value="">Aguardando tipo...</option></select>
         <button class="btn-main" onclick="irParaChecklist()">INICIAR INSPEÇÃO</button>
-        <button class="btn-main" style="background:#003566; color:white; margin-top:20px;" onclick="showScreen('dash-check')">INDICADORES CHECKLIST</button>
+        <button class="btn-main" style="background:var(--sv-blue-mid); color:white; margin-top:20px;" onclick="showScreen('dash-check')">INDICADORES CHECKLIST</button>
     </div>
 </div>
 
 <div id="screen-exec" class="screen">
     <div id="banner" style="background:var(--sv-blue-mid); padding:15px; border-radius:10px; margin-bottom:15px; font-weight:bold; color:var(--sv-yellow); text-align:center; border: 1px solid var(--sv-yellow);"></div>
     <div id="checklistArea"></div>
-    <label>Observações</label>
-    <textarea id="obs" rows="3"></textarea>
+    <label>Observações</label><textarea id="obs" rows="3"></textarea>
     <button id="btnSalvar" class="btn-main" onclick="salvarChecklist()">FINALIZAR E ENVIAR</button>
 </div>
 
 <div id="screen-bi" class="screen">
-    <div class="navbar"><img src="Logo.png"> <button class="btn-home" onclick="location.reload()">INÍCIO</button></div>
+    <div class="navbar"><img src="Logo.png"> <div style="display:flex; gap:5px;"><button class="btn-voltar" style="background:#27ae60; color:white;" onclick="exportPDF()">PDF</button><button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div></div>
+    
     <div class="kpi-grid" style="margin-top:20px;">
-        <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
-        <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
-        <div class="kpi-card"><h3>MÉDIA/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
+        <div class="kpi-card"><h3>Total OS</h3><div class="value" id="kTotal">0</div></div>
+        <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
+        <div class="kpi-card"><h3>Fechadas</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
+        <div class="kpi-card"><h3>Custo Peças</h3><div class="value" id="kCusto">R$ 0</div></div>
+        <div class="kpi-card"><h3>Total HH</h3><div class="value" id="kHH">0h</div></div>
+        <div class="kpi-card"><h3>Média/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
+        <div class="kpi-card"><h3>Custo/HH</h3><div class="value" id="kHHVal">R$ 0</div></div>
     </div>
-    <div id="pdfArea">
-        <div class="chart-card"><h4>Pareto Sistemas</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
-        <div class="chart-card"><h4>Top 10 Custo Equipamento</h4><div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div></div>
+
+    <div class="charts-container" id="pdfArea">
+        <div class="chart-card"><h4>Pareto: Volume OS / Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
+        <div class="chart-card"><h4>HH Acumulado / Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
         <div class="chart-card"><h4>Tendência Mensal</h4><div class="canvas-wrapper"><canvas id="cTrend"></canvas></div></div>
-        <div class="chart-card"><h4>HH por Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
+        <div class="chart-card"><h4>Top 10 Custo Equipamento</h4><div class="canvas-wrapper"><canvas id="cCustoEquip"></canvas></div></div>
+        <div class="chart-card"><h4>Top 10 Freq. Equipamento</h4><div class="canvas-wrapper"><canvas id="cEquipFreq"></canvas></div></div>
+        <div class="chart-card"><h4>HH por Sistema (Ranking)</h4><div class="canvas-wrapper"><canvas id="cHHHoriz"></canvas></div></div>
+        <div class="chart-card"><h4>Distribuição % Sistemas</h4><div class="canvas-wrapper"><canvas id="cPizzaBI"></canvas></div></div>
     </div>
 </div>
 
 <div id="screen-dash-check" class="screen">
-    <div class="navbar"><img src="Logo.png"> <button class="btn-home" onclick="showScreen('checklist')">VOLTAR</button></div>
-    <h3 style="text-align:center; color:var(--sv-yellow);">ESTATÍSTICAS DE INSPEÇÃO</h3>
-    <div class="chart-card"><h4>Status Itens (OK x NOK)</h4><canvas id="chartPizzaCheck" height="250"></canvas></div>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="showScreen('checklist')">VOLTAR</button></div>
+    <div class="chart-card" style="margin-top:20px;"><h4>Status Itens (OK x NOK)</h4><canvas id="chartPizzaCheck" height="250"></canvas></div>
     <div class="chart-card"><h4>Top 5 Falhas Apontadas</h4><canvas id="chartBarrasCheck" height="250"></canvas></div>
+</div>
+
+<div id="modal">
+    <div class="modal-content">
+        <button onclick="closeModal()" style="float:right; background:red; color:white; border:none; padding:10px; border-radius:5px;">X</button>
+        <h3 id="modalTitle">Detalhes</h3>
+        <div class="table-res"><table><thead><tr><th>OS</th><th>Prefixo</th><th>Sistema</th><th>Valor</th><th>HH</th><th>Status</th></tr></thead><tbody id="modalBody"></tbody></table></div>
+    </div>
 </div>
 
 <script>
@@ -128,39 +148,31 @@
         try {
             const resC = await fetch(URL_CHECKLIST);
             const dataC = await resC.json();
-            dMaquinas = dataC.maquinas || [];
-            dItens = dataC.itens || [];
-            dHistorico = dataC.historico || [];
-            
+            dMaquinas = dataC.maquinas || []; dItens = dataC.itens || []; dHistorico = dataC.historico || [];
             const selT = document.getElementById('tipoMaquina');
             [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => { if(t) selT.innerHTML += `<option value="${t}">${t}</option>`; });
-            
-            setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1500);
-        } catch (e) { alert("Erro ao carregar banco de dados."); }
+            document.getElementById('splash').style.display = 'none';
+        } catch (e) { console.error(e); }
     };
 
     function showScreen(screenId) {
         document.querySelectorAll('.screen, #screen-home').forEach(s => s.style.display = 'none');
         document.getElementById('screen-' + screenId).style.display = 'block';
-        document.getElementById('screen-' + screenId).classList.add('active');
         if(screenId === 'bi') loadBI();
         if(screenId === 'dash-check') renderDashCheck();
     }
 
-    // LÓGICA CHECKLIST
+    // --- CHECKLIST ---
     function filtraIDs() {
-        const t = document.getElementById('tipoMaquina').value;
-        const s = document.getElementById('idMaquina');
+        const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina');
         s.innerHTML = '<option value="">Selecione...</option>';
         dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => { s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`; });
     }
-
     function irParaChecklist() {
         const id = document.getElementById('idMaquina').value, t = document.getElementById('tipoMaquina').value;
-        if(!id) return alert("Selecione a máquina!");
+        if(!id) return alert("Selecione!");
         const itensF = dItens.filter(i => i.tipo_maquina.toString().toLowerCase() === t.toLowerCase());
-        const maq = dMaquinas.find(m => m.id_maquina === id);
-        document.getElementById('banner').innerText = `INSPEÇÃO: ${id} | PLACA: ${maq.placa}`;
+        document.getElementById('banner').innerText = `ID: ${id}`;
         const area = document.getElementById('checklistArea'); area.innerHTML = "";
         const cats = [...new Set(itensF.map(i => i.categoria))];
         cats.forEach(c => {
@@ -172,55 +184,53 @@
         });
         showScreen('exec');
     }
-
     async function salvarChecklist() {
-        const btn = document.getElementById('btnSalvar'); btn.disabled = true; btn.innerText = "ENVIANDO...";
         const resps = Array.from(document.querySelectorAll('.res-check')).map(s => ({ item: s.dataset.name, status: s.value }));
         const payload = { operador: document.getElementById('operador').value, idMaquina: document.getElementById('idMaquina').value, respostas: resps, observacao: document.getElementById('obs').value };
-        try {
-            await fetch(URL_CHECKLIST, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-            alert("✅ Enviado com Sucesso!"); location.reload();
-        } catch (e) { alert("Erro!"); btn.disabled = false; }
+        await fetch(URL_CHECKLIST, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        alert("Enviado!"); location.reload();
     }
 
-    // LÓGICA BI GESTÃO
+    // --- BI GESTÃO (TODOS OS 7 GRÁFICOS) ---
     async function loadBI() {
-        try {
-            const res = await fetch(URL_BI);
-            rawBI = await res.json();
-            const total = rawBI.length;
-            const custo = rawBI.reduce((acc, d) => acc + (d.produtos || 0), 0);
-            document.getElementById('kTotal').innerText = total;
-            document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-            document.getElementById('kHH').innerText = Math.round(rawBI.reduce((acc, d) => acc + (d.hh || 0), 0)) + "h";
-            document.getElementById('kAvg').innerText = (custo/total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
-            renderBICharts(rawBI);
-        } catch (e) { console.error(e); }
+        const res = await fetch(URL_BI); rawBI = await res.json();
+        const total = rawBI.length, custo = rawBI.reduce((acc, d) => acc + (d.produtos || 0), 0), hh = rawBI.reduce((acc, d) => acc + (d.hh || 0), 0);
+        document.getElementById('kTotal').innerText = total;
+        document.getElementById('kAbertas').innerText = rawBI.filter(d => d.status === 'Aberta').length;
+        document.getElementById('kFechadas').innerText = rawBI.filter(d => d.status === 'Finalizada').length;
+        document.getElementById('kCusto').innerText = custo.toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
+        document.getElementById('kHH').innerText = Math.round(hh) + "h";
+        document.getElementById('kAvg').innerText = (custo/total || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
+        document.getElementById('kHHVal').innerText = (custo/hh || 0).toLocaleString('pt-br',{style:'currency',currency:'BRL', maximumFractionDigits:0});
+        renderBICharts(rawBI);
     }
 
     function renderBICharts(data) {
-        Object.values(charts).forEach(c => c.destroy());
+        Object.values(charts).forEach(c => { if(c.id.indexOf('Check') === -1) c.destroy(); });
         const cfg = (m=false) => ({
             maintainAspectRatio: false,
             plugins: { datalabels: { color: '#fff', font:{weight:'bold'}, formatter: v => m ? 'R$ '+Math.round(v) : Math.round(v) }, legend:{display:false} },
+            onClick: (e, activeEls) => { if(activeEls.length > 0) openDetails(e.chart.data.labels[activeEls[0].index]); },
             scales: { y:{ ticks:{color:'#aaa'}, grid:{color:'rgba(255,255,255,0.05)'} }, x:{ ticks:{color:'#fff'} } }
         });
         charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
-        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
         charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
-        const tD = trend(data);
-        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:tD.l, datasets:[{data:tD.v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
+        charts.cCustoEquip = new Chart(document.getElementById('cCustoEquip'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","sum","produtos",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","sum","produtos",10).v, backgroundColor:'#ef4444'}] }, options:{...cfg(true), indexAxis:'y'} });
+        charts.cTrend = new Chart(document.getElementById('cTrend'), { type:'line', data:{ labels:trend(data).l, datasets:[{data:trend(data).v, borderColor:'#FFD60A', fill:true, backgroundColor:'rgba(255,214,10,0.1)'}] }, options:cfg() });
+        charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
+        charts.cPizzaBI = new Chart(document.getElementById('cPizzaBI'), { type:'pie', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7','#F72585']}] }, options:{ maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:'#fff',font:{size:10}}}} } });
     }
 
-    // LÓGICA DASHBOARD CHECKLIST
+    // --- INDICADORES CHECKLIST ---
     function renderDashCheck() {
         let ok = 0, nok = 0, ranking = {};
         dHistorico.forEach(f => { if(f.status === "OK") ok++; else { nok++; ranking[f.item] = (ranking[f.item] || 0) + 1; } });
-        if(charts.cP) charts.cP.destroy();
-        charts.cP = new Chart(document.getElementById('chartPizzaCheck'), { type:'pie', data:{ labels:['OK','NOK'], datasets:[{data:[ok,nok], backgroundColor:['#28a745','#d32f2f']}] }, options:{ plugins:{datalabels:{color:'#fff'}} } });
+        if(charts.cPCheck) charts.cPCheck.destroy();
+        charts.cPCheck = new Chart(document.getElementById('chartPizzaCheck'), { type:'pie', data:{ labels:['OK','NOK'], datasets:[{data:[ok,nok], backgroundColor:['#28a745','#d32f2f']}] }, options:{ plugins:{datalabels:{color:'#fff'}} } });
         const sorted = Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,5);
-        if(charts.cB) charts.cB.destroy();
-        charts.cB = new Chart(document.getElementById('chartBarrasCheck'), { type:'bar', data:{ labels:sorted.map(i=>i[0]), datasets:[{data:sorted.map(i=>i[1]), backgroundColor:'#FFD60A'}] }, options:{ indexAxis:'y', plugins:{legend:{display:false}, datalabels:{color:'#fff'}} } });
+        if(charts.cBCheck) charts.cBCheck.destroy();
+        charts.cBCheck = new Chart(document.getElementById('chartBarrasCheck'), { type:'bar', data:{ labels:sorted.map(i=>i[0]), datasets:[{data:sorted.map(i=>i[1]), backgroundColor:'#FFD60A'}] }, options:{ indexAxis:'y', plugins:{legend:{display:false}, datalabels:{color:'#fff'}} } });
     }
 
     function sort(arr, k, type, sK, l=99) {
@@ -232,6 +242,13 @@
         const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {});
         const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) };
     }
+    function openDetails(val) {
+        const f = rawBI.filter(d => d.sistema === val || d.cod_sec_veiculo === val);
+        document.getElementById('modalBody').innerHTML = f.map(d => `<tr><td>${d.nro_ordem_servico}</td><td>${d.cod_sec_veiculo}</td><td>${d.sistema}</td><td>R$ ${Math.round(d.produtos)}</td><td>${Math.round(d.hh)}h</td><td>${d.status}</td></tr>`).join('');
+        document.getElementById('modal').style.display = 'block';
+    }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:2, filename:'BI_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
 </script>
 </body>
 </html>
