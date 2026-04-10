@@ -13,28 +13,23 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
         
-        /* Splash Screen */
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.5s ease; }
         #splash img { width: 160px; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
 
-        /* Menu Inicial */
         #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
         .logo-home { width: 220px; margin-bottom: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
         .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; text-align: center; }
         .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; color: var(--sv-yellow); }
 
-        /* Navbar e Header */
         .header { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
         .header img { height: 35px; }
         .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); font-size: 11px; text-transform: uppercase; }
 
-        /* Telas */
         .screen { display: none; padding: 15px; max-width: 1600px; margin: auto; padding-bottom: 80px; }
         .active { display: block; }
 
-        /* Estilo do BI (Preservando Achatamento) */
         .filter-section { background: var(--sv-blue-mid); padding: 12px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
         .filter-section select, .filter-section input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; }
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px; }
@@ -42,27 +37,23 @@
         .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
         .kpi-card .value { font-size: 16px; font-weight: 800; margin: 5px 0; color: white; }
 
-        /* Card do Gráfico com Seletor OC/OPERAÇÃO */
         .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; margin-bottom: 15px; }
         .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
         .chart-header h4 { margin: 0; color: var(--sv-yellow); font-size: 11px; text-transform: uppercase; }
         
-        /* Botões OC e OPERAÇÃO */
         .drill-selectors { display: flex; gap: 2px; background: #001d3d; padding: 2px; border-radius: 6px; }
         .drill-btn { background: none; border: none; color: #888; padding: 5px 8px; font-size: 9px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
         .drill-btn.active { background: var(--sv-yellow); color: #001d3d; }
 
         .canvas-wrapper { position: relative; height: 280px; width: 100%; }
 
-        /* Checklist */
         .category-block { background: white; border-radius: 10px; margin: 15px 0; border: 2px solid #e1e5eb; overflow: hidden; color: #333; }
         .category-title { background: #f1f3f6; font-weight: 800; padding: 10px 15px; font-size: 12px; border-bottom: 2px solid #e1e5eb; color: var(--sv-blue-mid); }
         .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #eee; }
         .res-check { width: auto; min-width: 85px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; }
         label { display: block; margin: 15px 0 5px; font-weight: 700; color: var(--sv-yellow); font-size: 0.85rem; text-transform: uppercase; }
 
-        /* Modal Drill-down */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10001; padding: 10px; overflow-y: auto; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; padding: 10px; overflow-y: auto; }
         .modal-content { background: white; color: #333; border-radius: 10px; padding: 15px; width: 100%; max-width: 900px; margin: auto; }
         .modal-chart-area { height: 400px; width: 100%; }
         .table-responsive { overflow-x: auto; margin-top: 10px; }
@@ -112,8 +103,8 @@
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas">0</div></div>
-        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas">0</div></div>
+        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:var(--sv-danger)">0</div></div>
+        <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:var(--sv-success)">0</div></div>
         <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
         <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
         <div class="kpi-card"><h3>MÉDIA/OS</h3><div class="value" id="kAvg">R$ 0</div></div>
@@ -200,19 +191,23 @@
 </div>
 
 <script>
+    // 🔗 URLs INTEGRADAS - DEFINITIVAS
     const URL_CHECKLIST = "https://script.google.com/macros/s/AKfycbxXLqXBs3Of8h2TE1I2B61NfcJVONzHe45wGpzRaXlHdSAnBsdrZ67aALUjiN3DVj1z/exec";
-    const URL_BI = "https://script.google.com/macros/s/AKfycbyzjdFWktvrqmuWfYSsuc5_qQ8Qx0JcWDKkrE-Z3Fi5Bd2WR-4-HgCNSR1tfE1bil4_GQ/exec";
+    const URL_BI = "https://script.google.com/macros/s/AKfycbyvAUWILcvvxSy_O9aqyVkHpKOPKNKWB_3akKOqS0lR-KXxsQ_jkwUoUWJohlNgsT53Mg/exec";
     const KEY_OP = "Descrição (Centros de Resultado)";
 
     let rawBI = [], dHistorico = [], dMaquinas = [], dItens = [], charts = {}, drillMode = 'oc';
     Chart.register(ChartDataLabels);
 
     window.onload = async () => {
-        const resC = await fetch(URL_CHECKLIST); const dataC = await resC.json();
-        dMaquinas = dataC.maquinas; dItens = dataC.itens; dHistorico = dataC.historico;
-        const selT = document.getElementById('tipoMaquina');
-        [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
-        document.getElementById('splash').style.display = 'none';
+        try {
+            const resC = await fetch(URL_CHECKLIST); const dataC = await resC.json();
+            dMaquinas = dataC.maquinas; dItens = dataC.itens; dHistorico = dataC.historico;
+            const selT = document.getElementById('tipoMaquina');
+            selT.innerHTML = '<option value="">Selecione...</option>';
+            [...new Set(dMaquinas.map(m => m.tipo_maquina))].forEach(t => selT.innerHTML += `<option value="${t}">${t}</option>`);
+            document.getElementById('splash').style.display = 'none';
+        } catch (e) { console.error(e); }
     };
 
     function showScreen(id) {
@@ -288,9 +283,6 @@
         document.getElementById('modal').style.display = 'block';
     }
 
-    // Utilitários
-    function sort(arr, k, type, sK, l=99) { const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {}); const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l); return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) }; }
-    function trend(arr) { const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {}); const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) }; }
     function processPizza(arr, key) {
         const m = arr.reduce((acc, d) => { const x = d[key] || "N/A"; acc[x] = (acc[x] || 0) + 1; return acc; }, {});
         const total = Object.values(m).reduce((a, b) => a + b, 0);
@@ -299,11 +291,17 @@
         if (others > 0) { finalL.push("Outros"); finalV.push(others); }
         return { l: finalL, v: finalV };
     }
-    function closeModal() { document.getElementById('modal').style.display = 'none'; }
-    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:2, filename:'BI_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
-    
-    // Checklist
-    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = '<option value="">Selecione...</option>'; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
+
+    function sort(arr, k, type, sK, l=99) {
+        const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {});
+        const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l);
+        return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) };
+    }
+    function trend(arr) {
+        const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {});
+        const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) };
+    }
+    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = ''; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
     function irParaChecklist() {
         const id = document.getElementById('idMaquina').value, t = document.getElementById('tipoMaquina').value;
         const itensF = dItens.filter(i => i.tipo_maquina && i.tipo_maquina.toString().trim().toLowerCase() === t.trim().toLowerCase());
@@ -323,13 +321,12 @@
         alert("Enviado!"); location.reload();
     }
     function renderDashCheck() {
-        let ok = 0, nok = 0, ranking = {}; dHistorico.forEach(f => { if(f.status === "OK") ok++; else { nok++; ranking[f.item] = (ranking[f.item] || 0) + 1; } });
+        let ok = 0, nok = 0; dHistorico.forEach(f => { if(f.status === "OK") ok++; else nok++; });
         if(charts.cPCheck) charts.cPCheck.destroy();
         charts.cPCheck = new Chart(document.getElementById('chartPizzaCheck'), { type:'pie', data:{ labels:['OK','NOK'], datasets:[{data:[ok,nok], backgroundColor:['#22C55E','#EF4444']}] }});
-        const sorted = Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,5);
-        if(charts.cBCheck) charts.cBCheck.destroy();
-        charts.cBCheck = new Chart(document.getElementById('chartBarrasCheck'), { type:'bar', data:{ labels:sorted.map(i=>i[0]), datasets:[{data:sorted.map(i=>i[1]), backgroundColor: '#003566'}] }, options:{indexAxis:'y', plugins:{legend:{display:false}}}});
     }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    function exportPDF() { html2pdf().from(document.getElementById('pdfArea')).set({ margin:2, filename:'BI_SV.pdf', html2canvas:{scale:2}, jsPDF:{orientation:'landscape'} }).save(); }
 </script>
 </body>
 </html>
