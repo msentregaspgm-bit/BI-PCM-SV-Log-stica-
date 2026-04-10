@@ -11,42 +11,55 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue-dark); color: var(--sv-text); margin: 0; padding: 0; }
         
         #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue-dark); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s; }
-        #splash h1 { color: var(--sv-yellow); font-size: 50px; margin-bottom: 0; }
+        #splash img { width: 250px; margin-bottom: 20px; }
 
-        .navbar { background: var(--sv-blue-mid); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--sv-yellow); }
-        .main { padding: 25px; max-width: 1600px; margin: auto; }
+        .navbar { background: var(--sv-blue-mid); padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); }
+        .navbar img { height: 60px; }
+        
+        .main { padding: 20px; max-width: 1600px; margin: auto; }
 
-        .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 10px; margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; }
-        select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 8px; border-radius: 5px; }
+        .filter-section { background: var(--sv-blue-mid); padding: 15px; border-radius: 10px; margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; border: 1px solid rgba(255,255,255,0.1); }
+        select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 8px; border-radius: 5px; outline: none; }
 
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .kpi-card { background: var(--sv-blue-mid); padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .kpi-card h3 { margin: 0; font-size: 12px; color: var(--sv-yellow); text-transform: uppercase; }
-        .kpi-card .value { font-size: 28px; font-weight: 800; margin: 10px 0; color: white; }
+        .kpi-card h3 { margin: 0; font-size: 11px; color: var(--sv-yellow); text-transform: uppercase; letter-spacing: 1px; }
+        .kpi-card .value { font-size: 26px; font-weight: 800; margin: 10px 0; color: white; }
 
-        .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 25px; }
+        .charts-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 20px; }
         .chart-card { background: var(--sv-blue-mid); padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .chart-card h4 { margin: 0 0 20px 0; color: var(--sv-yellow); text-transform: uppercase; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .canvas-wrapper { position: relative; height: 350px; }
+        .chart-card h4 { margin: 0 0 15px 0; color: var(--sv-yellow); text-transform: uppercase; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .canvas-wrapper { position: relative; height: 320px; width: 100%; }
     </style>
 </head>
 <body>
 
-<div id="splash"><h1>SV LOGÍSTICA</h1><p>Sincronizando BI PCM...</p></div>
+<div id="splash">
+    <img src="Logo.jpg" alt="SV Logística">
+    <p style="font-weight: bold; letter-spacing: 2px;">SINCRONIZANDO PCM INTELLIGENCE...</p>
+</div>
 
 <div class="navbar">
-    <div style="display:flex; align-items:center; gap:15px;">
-        <span style="font-size: 24px; font-weight: 900; color: var(--sv-yellow);">SV</span>
-        <h2 style="margin:0; font-size: 18px;">PCM INTELLIGENCE</h2>
+    <img src="Logo.jpg" alt="Logo SV">
+    <div style="text-align: right">
+        <h2 style="margin:0; font-size: 16px; color: var(--sv-yellow);">DASHBOARD OPERACIONAL</h2>
+        <button onclick="location.reload()" style="background:var(--sv-yellow); border:none; padding:5px 15px; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:5px;">ATUALIZAR</button>
     </div>
-    <button onclick="location.reload()" style="background:var(--sv-yellow); border:none; padding:8px 15px; border-radius:5px; font-weight:bold; cursor:pointer;">ATUALIZAR</button>
 </div>
 
 <div class="main">
     <div class="filter-section">
         <input type="month" id="fData" onchange="updateDashboard()">
-        <select id="fManut" onchange="updateDashboard()"><option value="">Todas Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
-        <select id="fStatus" onchange="updateDashboard()"><option value="">Todos Status</option><option value="Finalizada">Finalizada</option><option value="Aberta">Aberta</option></select>
+        <select id="fManut" onchange="updateDashboard()">
+            <option value="">Manutenção: Todas</option>
+            <option value="Corretiva">Corretiva</option>
+            <option value="Preventiva">Preventiva</option>
+        </select>
+        <select id="fStatus" onchange="updateDashboard()">
+            <option value="">Status: Todos</option>
+            <option value="Finalizada">Finalizada</option>
+            <option value="Aberta">Aberta</option>
+        </select>
     </div>
 
     <div class="kpi-grid">
@@ -54,14 +67,29 @@
         <div class="kpi-card"><h3>Abertas</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
         <div class="kpi-card"><h3>Fechadas</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
         <div class="kpi-card"><h3>Custo Peças</h3><div class="value" id="kCusto">R$ 0</div></div>
-        <div class="kpi-card"><h3>Total HH</h3><div class="value" id="kHH">0</div></div>
+        <div class="kpi-card"><h3>HH Total</h3><div class="value" id="kHH">0</div></div>
     </div>
 
     <div class="charts-container">
-        <div class="chart-card"><h4>Pareto: OS por Sistema</h4><div class="canvas-wrapper"><canvas id="cPareto"></canvas></div></div>
-        <div class="chart-card"><h4>HH por Sistema</h4><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
-        <div class="chart-card"><h4>Top 10 Equipamentos</h4><div class="canvas-wrapper"><canvas id="cEquip"></canvas></div></div>
-        <div class="chart-card"><h4>Prioridade das OCs</h4><div class="canvas-wrapper"><canvas id="cPrio"></canvas></div></div>
+        <div class="chart-card">
+            <h4>Pareto: Volume de OS por Sistema</h4>
+            <div class="canvas-wrapper"><canvas id="cPareto"></canvas></div>
+        </div>
+        
+        <div class="chart-card">
+            <h4>Acumulado HH por Sistema</h4>
+            <div class="canvas-container"><div class="canvas-wrapper"><canvas id="cHH"></canvas></div></div>
+        </div>
+
+        <div class="chart-card">
+            <h4>Top 10 Equipamentos (Mais OS)</h4>
+            <div class="canvas-wrapper"><canvas id="cEquip"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+            <h4>Prioridade das OCs</h4>
+            <div class="canvas-wrapper"><canvas id="cPrio"></canvas></div>
+        </div>
     </div>
 </div>
 
@@ -71,23 +99,33 @@
     let charts = {};
 
     Chart.register(ChartDataLabels);
-    const chartConfig = { color: '#ffffff', font: { weight: 'bold', size: 11 }, formatter: Math.round };
+    const dataLabelStyle = {
+        color: '#ffffff',
+        font: { weight: 'bold', size: 12 },
+        anchor: 'end',
+        align: 'top',
+        offset: -5
+    };
 
     async function init() {
         try {
             const res = await fetch(URL_API);
             rawData = await res.json();
-            document.getElementById('splash').style.display = 'none';
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
             updateDashboard();
         } catch (e) { console.error(e); }
     }
 
     function updateDashboard() {
         const valData = document.getElementById('fData').value;
+        const valManut = document.getElementById('fManut').value;
+        const valStatus = document.getElementById('fStatus').value;
+
         const data = rawData.filter(d => {
             let dateMatch = valData ? String(d.data_e_hora_de_inicio).includes(valData) : true;
-            let mMatch = document.getElementById('fManut').value ? d.manutencao === document.getElementById('fManut').value : true;
-            let sMatch = document.getElementById('fStatus').value ? d.status === document.getElementById('fStatus').value : true;
+            let mMatch = valManut ? d.manutencao === valManut : true;
+            let sMatch = valStatus ? d.status === valStatus : true;
             return dateMatch && mMatch && sMatch;
         });
 
@@ -103,35 +141,53 @@
     function renderCharts(data) {
         Object.values(charts).forEach(c => c.destroy());
 
-        // 1. Pareto Sistemas
+        // 1. PARETO SISTEMAS (QTD OS)
         const pData = countAndSort(data, "sistema");
         charts.cPareto = new Chart(document.getElementById('cPareto'), {
             type: 'bar',
             data: { labels: pData.labels, datasets: [{ label: 'Qtd OS', data: pData.values, backgroundColor: '#FFD60A' }] },
-            options: { maintainAspectRatio: false, plugins: { datalabels: chartConfig, legend: {display:false} }, scales: { y: { grid: {color: 'rgba(255,255,255,0.1)'} } } }
+            options: { 
+                maintainAspectRatio: false, 
+                plugins: { datalabels: dataLabelStyle, legend: {display:false} },
+                scales: { y: { grid: {color: 'rgba(255,255,255,0.05)'}, ticks: {color: '#aaa'} }, x: { ticks: {color: '#fff'} } }
+            }
         });
 
-        // 2. HH Sistema
+        // 2. HH POR SISTEMA
         const hData = sumAndSort(data, "sistema", "hh");
         charts.cHH = new Chart(document.getElementById('cHH'), {
             type: 'bar',
             data: { labels: hData.labels, datasets: [{ label: 'Horas', data: hData.values, backgroundColor: '#00A8E8' }] },
-            options: { maintainAspectRatio: false, plugins: { datalabels: { ...chartConfig, formatter: v => v.toFixed(1) } } }
+            options: { 
+                maintainAspectRatio: false, 
+                plugins: { datalabels: {...dataLabelStyle, formatter: v => v.toFixed(1)}, legend: {display:false} },
+                scales: { y: { grid: {color: 'rgba(255,255,255,0.05)'} } }
+            }
         });
 
-        // 3. Top 10 Equipamentos
+        // 3. TOP 10 EQUIPAMENTOS
         const eData = countAndSort(data, "cod_sec_veiculo", 10);
         charts.cEquip = new Chart(document.getElementById('cEquip'), {
             type: 'bar',
-            options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { datalabels: chartConfig } },
+            options: { 
+                indexAxis: 'y', 
+                maintainAspectRatio: false, 
+                plugins: { datalabels: {...dataLabelStyle, align: 'right', anchor: 'end'} },
+                scales: { x: { grid: {display: false} }, y: { ticks: {color: '#fff', font: {size: 10}} } }
+            },
             data: { labels: eData.labels, datasets: [{ label: 'OS', data: eData.values, backgroundColor: '#4CC9F0' }] }
         });
 
-        // 4. Prioridade
+        // 4. PRIORIDADES
         const prio = countAndSort(data, "prioridade");
         charts.cPrio = new Chart(document.getElementById('cPrio'), {
             type: 'bar',
-            options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { datalabels: chartConfig } },
+            options: { 
+                indexAxis: 'y', 
+                maintainAspectRatio: false, 
+                plugins: { datalabels: dataLabelStyle },
+                scales: { y: { ticks: {color: '#fff'} } }
+            },
             data: { labels: prio.labels, datasets: [{ label: 'Qtd', data: prio.values, backgroundColor: '#F72585' }] }
         });
     }
