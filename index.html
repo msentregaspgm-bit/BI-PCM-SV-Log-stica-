@@ -2,58 +2,67 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SV MASTER - Sistema Total</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BI PCM SV MASTER - LAYOUT FINAL</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
-        :root { --sv-blue: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD; }
+        :root { --sv-blue-dark: #001D3D; --sv-blue-mid: #003566; --sv-yellow: #FFD60A; --sv-text: #E0E1DD; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
-        
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sv-blue); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.5s; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--sv-blue-dark); color: var(--sv-text); margin: 0; padding: 0; overflow-x: hidden; }
+
+        #splash { position: fixed; width: 100%; height: 100%; background: var(--sv-blue-dark); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         #splash img { width: 180px; }
 
+        /* HEADER E NAV */
+        .navbar { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
+        .navbar img { height: 35px; }
+        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue-dark); font-size: 11px; text-transform: uppercase; }
+
+        /* HOME MENU */
         #screen-home { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px; }
-        .logo-home { width: 220px; margin-bottom: 40px; }
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; max-width: 400px; }
         .menu-card { background: var(--sv-blue-mid); border: 2px solid var(--sv-yellow); padding: 30px; border-radius: 20px; cursor: pointer; text-align: center; }
-        .menu-card h2 { margin: 10px 0 0; font-size: 1.2rem; text-transform: uppercase; color: var(--sv-yellow); }
+        .menu-card h2 { margin-top: 10px; font-size: 1.2rem; color: var(--sv-yellow); text-transform: uppercase; }
 
-        .header { background: var(--sv-blue-mid); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--sv-yellow); position: sticky; top: 0; z-index: 999; }
-        .header img { height: 35px; }
-        .btn-voltar { background: var(--sv-yellow); border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; color: var(--sv-blue); font-size: 11px; }
-
-        .screen { display: none; padding: 15px; max-width: 1600px; margin: auto; padding-bottom: 80px; }
+        /* TELAS */
+        .screen { display: none; padding: 10px; max-width: 1600px; margin: auto; }
         .active { display: block; }
 
-        /* Filtros e KPIs */
-        .filter-section { background: var(--sv-blue-mid); padding: 12px; border-radius: 10px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; border: 1px solid rgba(255,255,255,0.1); }
-        .filter-section select, .filter-section input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 10px; border-radius: 6px; font-size: 14px; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .kpi-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid var(--sv-yellow); }
-        .kpi-card h3 { margin: 0; font-size: 9px; color: var(--sv-yellow); text-transform: uppercase; }
-        .kpi-card .value { font-size: 16px; font-weight: 800; margin: 5px 0; color: white; }
+        /* KPIs COMPACTOS */
+        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
+        @media (min-width: 768px) { .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); } }
+        .kpi-card { background: var(--sv-blue-mid); padding: 12px; border-radius: 10px; text-align: center; border-left: 4px solid var(--sv-yellow); }
+        .kpi-card h3 { margin: 0; font-size: 8px; color: var(--sv-yellow); text-transform: uppercase; }
+        .kpi-card .value { font-size: 15px; font-weight: 800; margin: 4px 0; color: white; }
 
-        /* Gráficos */
-        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); width: 100%; margin-bottom: 15px; }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
-        .chart-header h4 { margin: 0; color: var(--sv-yellow); font-size: 11px; text-transform: uppercase; }
-        .drill-selectors { display: flex; gap: 2px; background: #001d3d; padding: 2px; border-radius: 6px; }
-        .drill-btn { background: none; border: none; color: #888; padding: 5px 8px; font-size: 9px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; }
+        /* FILTROS */
+        .filter-section { background: var(--sv-blue-mid); padding: 10px; border-radius: 8px; margin-bottom: 15px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+        select, input { background: #001d3d; color: white; border: 1px solid var(--sv-yellow); padding: 8px; border-radius: 5px; font-size: 13px; width: 100%; }
+
+        /* GRÁFICOS ACHATADOS */
+        .charts-container { display: flex; flex-direction: column; gap: 15px; }
+        @media (min-width: 992px) { .charts-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } }
+        .chart-card { background: var(--sv-blue-mid); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); width: 100%; }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+        .chart-header h4 { margin: 0; color: var(--sv-yellow); font-size: 10px; text-transform: uppercase; }
+        .canvas-wrapper { position: relative; height: 260px; width: 100%; }
+
+        /* SELETORES DRILL-DOWN */
+        .drill-selectors { display: flex; gap: 2px; background: #001d3d; padding: 2px; border-radius: 4px; }
+        .drill-btn { background: none; border: none; color: #888; padding: 4px 6px; font-size: 8px; font-weight: bold; cursor: pointer; border-radius: 3px; }
         .drill-btn.active { background: var(--sv-yellow); color: #001d3d; }
-        .canvas-wrapper { position: relative; height: 280px; width: 100%; }
 
-        /* Checklist */
+        /* CHECKLIST LAYOUT */
         .category-block { background: white; border-radius: 10px; margin: 15px 0; border: 2px solid #e1e5eb; overflow: hidden; color: #333; }
-        .category-title { background: #f1f3f6; font-weight: 800; padding: 10px 15px; font-size: 12px; border-bottom: 2px solid #e1e5eb; color: var(--sv-blue-mid); }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #eee; }
-        .res-check { width: auto; min-width: 85px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; }
-        label { display: block; margin: 15px 0 5px; font-weight: 700; color: var(--sv-yellow); font-size: 0.85rem; text-transform: uppercase; }
+        .category-title { background: #f1f3f6; font-weight: 800; padding: 10px; font-size: 11px; color: var(--sv-blue-mid); }
+        .item-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; align-items: center; }
+        .res-check { width: 80px; padding: 4px; border-radius: 5px; }
+        label.lbl-chk { display: block; margin: 10px 0 3px; font-weight: 700; color: var(--sv-yellow); font-size: 11px; }
 
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; padding: 10px; overflow-y: auto; }
+        /* MODAL */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10001; padding: 10px; overflow-y: auto; }
         .modal-content { background: white; color: #333; border-radius: 10px; padding: 15px; width: 100%; max-width: 900px; margin: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 10px; min-width: 600px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
@@ -64,42 +73,44 @@
 <div id="splash"><img src="Logo.png"></div>
 
 <div id="screen-home" class="active">
-    <img src="Logo.png" class="logo-home">
+    <img src="Logo.png" style="width: 200px; margin-bottom: 30px;">
     <div class="menu-grid">
-        <div class="menu-card" onclick="showScreen('checklist')"><h2>Checklist Frota</h2></div>
-        <div class="menu-card" onclick="showScreen('bi')"><h2>Gestão BI (PCM)</h2></div>
+        <div class="menu-card" onclick="showScreen('checklist')"><h2>Checklist</h2></div>
+        <div class="menu-card" onclick="showScreen('bi')"><h2>Gestão BI</h2></div>
     </div>
 </div>
 
 <div id="screen-checklist" class="screen">
-    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
-    <div style="max-width: 500px; margin: auto; padding-top: 20px;">
-        <label>Operador</label><input type="text" id="operador" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb; margin-bottom:12px;">
-        <label>Tipo Máquina</label><select id="tipoMaquina" onchange="filtraIDs()" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb;"><option value="">Selecione...</option></select>
-        <label>ID Máquina</label><select id="idMaquina" style="width:100%; padding:14px; border-radius:10px; border:2px solid #e1e5eb;"><option value="">Aguardando...</option></select>
-        <button class="btn-voltar" style="width:100%; padding:18px; margin-top:10px; font-size:14px;" onclick="irParaChecklist()">INICIAR INSPEÇÃO</button>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div style="max-width: 450px; margin: auto; padding-top: 15px;">
+        <label class="lbl-chk">OPERADOR</label>
+        <input type="text" id="operador" style="padding:10px; margin-bottom:10px;">
+        <label class="lbl-chk">TIPO MÁQUINA</label>
+        <select id="tipoMaquina" onchange="filtraIDs()" style="padding:10px;"><option value="">Selecione...</option></select>
+        <label class="lbl-chk">ID MÁQUINA</label>
+        <select id="idMaquina" style="padding:10px;"><option value="">Aguardando...</option></select>
+        <button class="btn-voltar" style="width:100%; padding:15px; margin-top:15px; font-size:13px;" onclick="irParaChecklist()">INICIAR</button>
     </div>
 </div>
 
 <div id="screen-exec" class="screen">
-    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="showScreen('checklist')">VOLTAR</button></div>
-    <div id="banner" style="text-align:center; padding:15px; font-weight:bold; color:var(--sv-yellow); background: var(--sv-blue-mid); border-radius: 10px; margin: 15px 0;"></div>
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="showScreen('checklist')">VOLTAR</button></div>
+    <div id="banner" style="text-align:center; padding:10px; font-weight:800; color:var(--sv-yellow); background: var(--sv-blue-mid); border-radius: 8px; margin: 10px 0;"></div>
     <div id="checklistArea"></div>
-    <label>Observações</label><textarea id="obs" rows="3" style="width:100%; border-radius:10px; border:2px solid #e1e5eb; padding:10px;"></textarea>
-    <button class="btn-voltar" style="width:100%; padding:20px; font-size: 16px; margin-top:15px;" onclick="salvarChecklist()">FINALIZAR E ENVIAR</button>
+    <button class="btn-voltar" style="width:100%; padding:18px; margin-top:15px;" onclick="salvarChecklist()">ENVIAR CHECKLIST</button>
 </div>
 
 <div id="screen-bi" class="screen">
-    <div class="header"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
-    <div class="filter-section" style="margin-top:20px;">
+    <div class="navbar"><img src="Logo.png"> <button class="btn-voltar" onclick="location.reload()">INÍCIO</button></div>
+    <div class="filter-section" style="margin-top:15px;">
         <input type="month" id="fData" onchange="updateDashboard()">
         <select id="fManut" onchange="updateDashboard()"><option value="">Manutenções</option><option value="Corretiva">Corretiva</option><option value="Preventiva">Preventiva</option></select>
-        <select id="fStatus" onchange="updateDashboard()"><option value="">Status</option><option value="Finalizada">Finalizadas</option><option value="Aberta">Abertas</option></select>
+        <select id="fStatus" onchange="updateDashboard()"><option value="">Status</option><option value="Finalizada">Finalizada</option><option value="Aberta">Aberta</option></select>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><h3>TOTAL OS</h3><div class="value" id="kTotal">0</div></div>
-        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:red">0</div></div>
+        <div class="kpi-card"><h3>ABERTAS</h3><div class="value" id="kAbertas" style="color:#ff4d4d">0</div></div>
         <div class="kpi-card"><h3>FECHADAS</h3><div class="value" id="kFechadas" style="color:#00ff88">0</div></div>
         <div class="kpi-card"><h3>CUSTO PEÇAS</h3><div class="value" id="kCusto">R$ 0</div></div>
         <div class="kpi-card"><h3>TOTAL HH</h3><div class="value" id="kHH">0h</div></div>
@@ -109,7 +120,7 @@
 
     <div class="charts-container" id="pdfArea">
         <div class="chart-card">
-            <div class="chart-header"><h4>Pareto: Volume OS / Sistema</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrill(this,'oc','count')">OC</button><button class="drill-btn" onclick="setDrill(this,'op','count')">Operação</button></div></div>
+            <div class="chart-header"><h4>Volume OS / Sistema</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrill(this,'oc','count')">OC</button><button class="drill-btn" onclick="setDrill(this,'op','count')">Operação</button></div></div>
             <div class="canvas-wrapper"><canvas id="cPareto"></canvas></div>
         </div>
         <div class="chart-card">
@@ -117,7 +128,7 @@
             <div class="canvas-wrapper"><canvas id="cHH"></canvas></div>
         </div>
         <div class="chart-card">
-            <div class="chart-header"><h4>Top 5 Custos Operação</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrill(this,'oc','sum','produtos')">OC</button></div></div>
+            <div class="chart-header"><h4>Top 5 Custo Operação</h4><div class="drill-selectors"><button class="drill-btn active" onclick="setDrill(this,'oc','sum','produtos')">OC</button></div></div>
             <div class="canvas-wrapper"><canvas id="cCustoOp"></canvas></div>
         </div>
         <div class="chart-card">
@@ -157,7 +168,7 @@
     const URL_BI = "https://script.google.com/macros/s/AKfycbzlYZKaG8nRon46HLwJWVsskcc-L0-_-pLUvGhdy2GKRM04-WO56ofA0B6kWOwu6BL1-w/exec";
     const KEY_OP = "centro_resultado";
 
-    let rawBI = [], dMaquinas = [], dItens = [], charts = {};
+    let rawBI = [], dMaquinas = [], dItens = [], charts = {}, drillMode = 'oc', dMetric = 'count', dSumKey = null;
     Chart.register(ChartDataLabels);
 
     window.onload = async () => {
@@ -177,8 +188,7 @@
     }
 
     function setDrill(btn, mode, metric, sumKey) {
-        const parent = btn.closest('.drill-selectors');
-        parent.querySelectorAll('.drill-btn').forEach(b => b.classList.remove('active'));
+        btn.parentElement.querySelectorAll('.drill-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const card = btn.closest('.chart-card');
         card.dataset.drillMode = mode; card.dataset.drillMetric = metric; card.dataset.drillSumKey = sumKey || "";
@@ -203,12 +213,7 @@
     function renderChartsBI(data) {
         const ids = ['cPareto','cHH','cTrend','cCustoEquip','cEquipFreq','cPizza','cCustoOp','cHHHoriz'];
         ids.forEach(id => { if(charts[id]) charts[id].destroy(); });
-        const cfg = (m=false) => ({
-            maintainAspectRatio: false,
-            plugins: { datalabels: { color: '#fff', font:{weight:'bold', size:9}, anchor: 'end', align: 'top', formatter: v => m ? 'R$ '+Math.round(v).toLocaleString('pt-br') : Math.round(v) }, legend:{display:false} },
-            onClick: (e, activeEls) => { if(activeEls.length > 0) handleDrill(data, e.chart.data.labels[activeEls[0].index], e.chart.canvas.closest('.chart-card')); },
-            scales: { y: { ticks: { color: '#aaa', font:{size:9}}, grid:{color:'rgba(255,255,255,0.05)'} }, x: { ticks: { color: '#fff', font:{size:9}} } }
-        });
+        const cfg = (m=false) => ({ maintainAspectRatio:false, plugins:{ datalabels:{color:'#fff', font:{weight:'bold', size:9}, anchor:'end', align:'top', formatter: v => m ? 'R$ '+Math.round(v) : Math.round(v)}, legend:{display:false} }, onClick:(e, activeEls)=>{ if(activeEls.length>0) handleDrill(data, e.chart.data.labels[activeEls[0].index], e.chart.canvas.closest('.chart-card')); }, scales:{ y:{ticks:{color:'#aaa', font:{size:9}}, grid:{color:'rgba(255,255,255,0.05)'}}, x:{ticks:{color:'#fff', font:{size:9}}} } });
         charts.cPareto = new Chart(document.getElementById('cPareto'), { type:'bar', data:{ labels:sort(data,"sistema","count").l, datasets:[{data:sort(data,"sistema","count").v, backgroundColor:'#FFD60A'}] }, options:cfg() });
         charts.cHH = new Chart(document.getElementById('cHH'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#00A8E8'}] }, options:cfg() });
         charts.cCustoOp = new Chart(document.getElementById('cCustoOp'), { type:'bar', data:{ labels:sort(data,KEY_OP,"sum","produtos",5).l, datasets:[{data:sort(data,KEY_OP,"sum","produtos",5).v, backgroundColor:'#22C55E'}] }, options:cfg(true) });
@@ -217,7 +222,7 @@
         charts.cEquipFreq = new Chart(document.getElementById('cEquipFreq'), { type:'bar', data:{ labels:sort(data,"cod_sec_veiculo","count",null,10).l, datasets:[{data:sort(data,"cod_sec_veiculo","count",null,10).v, backgroundColor:'#4CC9F0'}] }, options:{...cfg(), indexAxis:'y'} });
         charts.cHHHoriz = new Chart(document.getElementById('cHHHoriz'), { type:'bar', data:{ labels:sort(data,"sistema","sum","hh").l, datasets:[{data:sort(data,"sistema","sum","hh").v, backgroundColor:'#7209B7'}] }, options:{...cfg(), indexAxis:'y'} });
         const pz = processPizza(data, "sistema");
-        charts.cPizza = new Chart(document.getElementById('cPizza'), { type:'pie', data:{ labels:pz.l, datasets:[{data:pz.v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7']}] }, options:{ maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{color:'#fff'}}, datalabels:{color:'#fff'} } } });
+        charts.cPizza = new Chart(document.getElementById('cPizza'), { type:'pie', data:{ labels:pz.l, datasets:[{data:pz.v, backgroundColor:['#FFD60A','#00A8E8','#4CC9F0','#7209B7']}] }, options:{ maintainAspectRatio:false, plugins:{ legend:{position:'right',labels:{color:'#fff', font:{size:8}}}, datalabels:{color:'#fff'} } } });
     }
 
     function handleDrill(data, label, card) {
@@ -231,14 +236,15 @@
             document.getElementById('modalTable').style.display = 'none'; document.getElementById('modalChart').style.display = 'block';
             if(charts.cPopUp) charts.cPopUp.destroy();
             const popD = sort(sub, KEY_OP, metric, sumKey);
-            charts.cPopUp = new Chart(document.getElementById('cPopUp'), { type: 'bar', data: { labels: popD.l, datasets: [{ data: popD.v, backgroundColor: '#FFD60A' }] }, options: { maintainAspectRatio: false, plugins: { datalabels: { color: '#333', font:{weight:'bold'}, formatter: v => sumKey === 'produtos' ? 'R$ '+Math.round(v) : Math.round(v) } } } });
+            charts.cPopUp = new Chart(document.getElementById('cPopUp'), { type:'bar', data:{ labels:popD.l, datasets:[{data:popD.v, backgroundColor:'#FFD60A'}] }, options:{ maintainAspectRatio:false, plugins:{ datalabels:{color:'#333', font:{weight:'bold'}, formatter:v=>sumKey==='produtos'?'R$ '+Math.round(v):Math.round(v)} } } });
         }
         document.getElementById('modal').style.display = 'block';
     }
 
-    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = '<option value="">Selecione...</option>'; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
+    function filtraIDs() { const t = document.getElementById('tipoMaquina').value; const s = document.getElementById('idMaquina'); s.innerHTML = ''; dMaquinas.filter(m => m.tipo_maquina === t).forEach(m => s.innerHTML += `<option value="${m.id_maquina}">${m.id_maquina}</option>`); }
     function irParaChecklist() {
         const id = document.getElementById('idMaquina').value, t = document.getElementById('tipoMaquina').value;
+        if(!id) return alert("Selecione!");
         const itensF = dItens.filter(i => i.tipo_maquina.toString().toLowerCase() === t.toLowerCase());
         document.getElementById('banner').innerText = `ID: ${id}`;
         const area = document.getElementById('checklistArea'); area.innerHTML = "";
@@ -249,8 +255,8 @@
         });
         showScreen('exec');
     }
-    async function salvarChecklist() { alert("Checklist Enviado!"); location.reload(); }
-    function sort(arr, k, type, sK, l=99) { const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {}); const s = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) }; }
+    async function salvarChecklist() { alert("Enviado!"); location.reload(); }
+    function sort(arr, k, type, sK, l=99) { const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + (type==="sum" ? (d[sK]||0) : 1); return acc; }, {}); const sorted = Object.entries(m).sort((a,b) => b[1] - a[1]).slice(0, l); return { l: sorted.map(x=>x[0]), v: sorted.map(x=>x[1]) }; }
     function trend(arr) { const m = arr.reduce((acc, d) => { const x = String(d.data_e_hora_de_inicio).substring(0, 7); if(x.includes('-')) acc[x] = (acc[x] || 0) + 1; return acc; }, {}); const s = Object.entries(m).sort(); return { l: s.map(x=>x[0]), v: s.map(x=>x[1]) }; }
     function processPizza(arr, k) { const m = arr.reduce((acc, d) => { const x = d[k] || "N/A"; acc[x] = (acc[x] || 0) + 1; return acc; }, {}); const total = Object.values(m).reduce((a, b) => a + b, 0); let others = 0, fL = [], fV = []; Object.entries(m).forEach(([lbl, v]) => { if ((v / total) < 0.20) others += v; else { fL.push(lbl); fV.push(v); } }); if (others > 0) { fL.push("Outros"); fV.push(others); } return { l: fL, v: fV }; }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
